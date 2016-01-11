@@ -7,6 +7,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Здесь будет подробная инфа  про пост"
+        android:text=""
         android:id="@+id/textView" />
+
+
 </LinearLayout>

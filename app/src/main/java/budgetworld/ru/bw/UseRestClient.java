@@ -67,7 +67,6 @@ public class UseRestClient {
                         @Override
                         public void run() {
                             //TODO: update your UI
-                            System.out.println("Обновляю лист вью");
                             updatePosts(activity);
                         }
                     });

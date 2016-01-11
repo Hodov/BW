@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">BW</string>
+    <string name="header">Budget World</string>
+
 </resources>
