@@ -20,7 +20,8 @@ public class PostsAdapter extends ArrayAdapter<Post> {
     public PostsAdapter(Context context, ArrayList<Post> posts) {
         super(context, 0, posts);
     }
-    
+
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 

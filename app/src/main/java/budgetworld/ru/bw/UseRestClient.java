@@ -78,10 +78,10 @@ public class UseRestClient {
                     System.out.println(responseData);
                     JSONArray jsonArr = new JSONArray(responseData);
                     //final Posts posts = new Posts(jsonArr);
-                    if (action == "load") {
+                    if ((action == "load") || (posts.isEmpty())) {
                         this.mapPosts(jsonArr);
                     }
-                    if (action == "refresh") {
+                    else if (action == "refresh") {
                         this.mapPostsRefresh(jsonArr);
                     }
                     //мы должны обновить UI===============
