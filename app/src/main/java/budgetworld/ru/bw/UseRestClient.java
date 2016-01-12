@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.HttpUrl;
@@ -54,6 +55,20 @@ public class UseRestClient {
             public void onFailure(Request request, IOException e) {
                 System.out.println("ОШИБКА");
                 System.out.println(e);
+                mSwipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.activity_main_swipe_refresh_layout);
+                if (mSwipeRefreshLayout.isRefreshing()){
+                    System.out.println("Выключаем рефреш");
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast toast = Toast.makeText(activity, "Траблы с инетом", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                });
+
             }
 
             @Override
