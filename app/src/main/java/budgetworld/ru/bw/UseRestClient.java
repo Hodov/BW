@@ -1,6 +1,7 @@
 package budgetworld.ru.bw;
 
 import android.app.Activity;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,13 +28,14 @@ public class UseRestClient {
     Activity activity;
     ArrayList<Post> posts = new ArrayList<Post>();
     PostsAdapter adapter;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
 
     public UseRestClient(Activity _activity) {
         activity = _activity;
     }
 
-    public void getRestClient(Integer page) {
+    public void getRestClient(Integer page, final String action) {
 
         //=========================================
         //Готовим УРЛ
@@ -61,12 +63,21 @@ public class UseRestClient {
                     System.out.println(responseData);
                     JSONArray jsonArr = new JSONArray(responseData);
                     //final Posts posts = new Posts(jsonArr);
-                    this.mapPosts(jsonArr);
+                    if (action == "load") {
+                        this.mapPosts(jsonArr);
+                    }
+                    if (action == "refresh") {
+                        this.mapPostsRefresh(jsonArr);
+                    }
                     //мы должны обновить UI===============
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             //TODO: update your UI
+                            if (action == "refresh") {
+                                mSwipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.activity_main_swipe_refresh_layout);
+                                mSwipeRefreshLayout.setRefreshing(false);
+                            }
                             updatePosts(activity);
                         }
                     });
@@ -83,16 +94,33 @@ public class UseRestClient {
                 //мапим данные из Json
                 for (int a = 0; a < resultsJS.length(); a++) {
                     JSONObject postJS = resultsJS.getJSONObject(a);
-                    addPost(postJS.getInt("id"), postJS.getJSONObject("title").getString("rendered"), postJS.getJSONObject("excerpt").getString("rendered"));
+                    addPost(postJS.getInt("id"), postJS.getJSONObject("title").getString("rendered"), postJS.getJSONObject("excerpt").getString("rendered"), "end");
                 }
             }
 
-            private void addPost(Integer id, String title, String body) {
+            public void mapPostsRefresh(JSONArray resultsJS) throws JSONException {
+                //мапим данные из Json
+                Integer a = 0;
+                JSONObject postJS = resultsJS.getJSONObject(a);
+                while ((posts.get(a).postID != postJS.getInt("id")) && (a<=resultsJS.length())) {
+                    postJS = resultsJS.getJSONObject(a);
+                    addPost(postJS.getInt("id"), postJS.getJSONObject("title").getString("rendered"), postJS.getJSONObject("excerpt").getString("rendered"), a.toString());
+                    a++;
+                }
+            }
+
+
+            private void addPost(Integer id, String title, String body, String position) {
                 Post newPost = new Post();
                 newPost.postID = id;
                 newPost.postTitle = title;
                 newPost.postBody = body;
-                posts.add(newPost);
+                if (position == "end") {
+                    posts.add(newPost);
+                } else {
+                    Integer i = Integer.valueOf(position);
+                    posts.add(i,newPost);
+                }
             }
 
             public void updatePosts(Activity _activity) {

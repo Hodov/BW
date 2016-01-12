@@ -4,6 +4,7 @@ package budgetworld.ru.bw;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -17,21 +18,26 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //понеслась
+
+        //Поехали
 
         //ACTION BAR ==================================================================
         ActionBar actionBar = getSupportActionBar(); // or getActionBar();
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setLogo(R.mipmap.ic_launcher);
+        actionBar.setDisplayUseLogoEnabled(true);
         //ACTION BAR ==================================================================
 
+        // получаем первую порцию данных и заполняем адаптер
         final UseRestClient bwRest = new UseRestClient(this);
         bwRest.drawPosts(this);
-        bwRest.getRestClient(1);
-       // bwRest.getRestClient(2);
+        bwRest.getRestClient(1, "load");
 
+        //находим лист вью
         ListView lvItems = (ListView) findViewById(R.id.lvItems);
+        //находим рефреш адаптер
+        SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
+
         //слушаем конец списка
         lvItems.setOnScrollListener(new EndlessScrollListener() {
             @Override
@@ -39,11 +45,12 @@ public class MainActivity extends ActionBarActivity {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to your AdapterView
                 System.out.println("Грузим еще одну страницу");
-                bwRest.getRestClient(page);
+                bwRest.getRestClient(page, "load");
                 // or customLoadMoreDataFromApi(totalItemsCount);
                 return true; // ONLY if more data is actually being loaded; false otherwise.
             }
         });
+        //==================
 
         //слушаем клик
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -56,8 +63,17 @@ public class MainActivity extends ActionBarActivity {
 
             }
         });
+        //==================
 
+        //слушаем рефреш адаптер
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Integer page = 1;
+                bwRest.getRestClient(page, "refresh");
+            }
+
+        });
 
     }
-
 }
