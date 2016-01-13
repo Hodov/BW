@@ -16,11 +16,35 @@ import java.util.List;
  */
 public class PostsAdapter extends ArrayAdapter<Post> {
 
+    private ArrayList<Post> posts;
+    //Context context;
+
 
     public PostsAdapter(Context context, ArrayList<Post> posts) {
         super(context, 0, posts);
+        this.posts = posts;
     }
 
+    @Override
+    public int getCount() {
+        return posts.size()+1;
+    }
+
+    @Override
+    public Post getItem(int position) {
+        Post post = new Post();
+        //System.out.println(position);
+        //System.out.println(this.posts.size());
+        if (position < this.posts.size()) {
+            post = posts.get(position);
+        }
+        else {
+            //System.out.println("Попытка отобразить ячейку с загрузкой");
+            post.postTitle = "Загрузка...";
+            post.postBody = " ";
+        }
+        return post;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
