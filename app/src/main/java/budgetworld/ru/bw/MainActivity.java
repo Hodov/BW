@@ -18,7 +18,6 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //Поехали
 
         //ACTION BAR ==================================================================
@@ -44,7 +43,6 @@ public class MainActivity extends ActionBarActivity {
             public boolean onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to your AdapterView
-                System.out.println("Грузим еще одну страницу");
                 bwRest.getRestClient(page, "load");
                 // or customLoadMoreDataFromApi(totalItemsCount);
                 return true; // ONLY if more data is actually being loaded; false otherwise.
@@ -69,6 +67,7 @@ public class MainActivity extends ActionBarActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                System.out.println("Стартует рефреш адаптер");
                 Integer page = 1;
                 bwRest.getRestClient(page, "refresh");
             }
@@ -76,4 +75,5 @@ public class MainActivity extends ActionBarActivity {
         });
 
     }
+
 }

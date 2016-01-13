@@ -57,14 +57,13 @@ public class UseRestClient {
                 System.out.println(e);
                 mSwipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.activity_main_swipe_refresh_layout);
                 if (mSwipeRefreshLayout.isRefreshing()){
-                    System.out.println("Выключаем рефреш");
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
 
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast toast = Toast.makeText(activity, "Траблы с инетом", Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(activity, R.string.connection_troubles, Toast.LENGTH_LONG);
                         toast.show();
                     }
                 });
@@ -83,6 +82,7 @@ public class UseRestClient {
                     }
                     else if (action == "refresh") {
                         this.mapPostsRefresh(jsonArr);
+                        System.out.println("Мапим новые данные");
                     }
                     //мы должны обновить UI===============
                     activity.runOnUiThread(new Runnable() {
@@ -92,6 +92,7 @@ public class UseRestClient {
                             if (action == "refresh") {
                                 mSwipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.activity_main_swipe_refresh_layout);
                                 mSwipeRefreshLayout.setRefreshing(false);
+                                System.out.println("Отключаем рефреш адаптер");
                             }
                             updatePosts(activity);
                         }
@@ -102,6 +103,9 @@ public class UseRestClient {
                     //написать клиенту про траблы
                     System.out.println("Не вышло");
                     System.out.println(e);
+                    Toast toast = Toast.makeText(activity, R.string.json_troubles, Toast.LENGTH_LONG);
+                    toast.show();
+
                 }
             }
 
