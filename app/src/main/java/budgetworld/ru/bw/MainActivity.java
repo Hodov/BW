@@ -1,15 +1,13 @@
 package budgetworld.ru.bw;
 
 
+import android.support.v7.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -23,12 +21,13 @@ public class MainActivity extends ActionBarActivity {
         //Поехали
 
         //ACTION BAR ==================================================================
-        ActionBar actionBar = getSupportActionBar(); // or getActionBar();
+        ActionBar actionBar = getSupportActionBar(); // or getActionBar(); getSupportActionBar();
        // actionBar.setDisplayShowHomeEnabled(true);
         //actionBar.setLogo(R.mipmap.ic_launcher);
         //actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setCustomView(R.layout.custom_actionbar);
+
         //ACTION BAR ==================================================================
 
         // получаем первую порцию данных и заполняем адаптер
