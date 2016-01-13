@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -22,9 +24,11 @@ public class MainActivity extends ActionBarActivity {
 
         //ACTION BAR ==================================================================
         ActionBar actionBar = getSupportActionBar(); // or getActionBar();
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setLogo(R.mipmap.ic_launcher);
-        actionBar.setDisplayUseLogoEnabled(true);
+       // actionBar.setDisplayShowHomeEnabled(true);
+        //actionBar.setLogo(R.mipmap.ic_launcher);
+        //actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setCustomView(R.layout.custom_actionbar);
         //ACTION BAR ==================================================================
 
         // получаем первую порцию данных и заполняем адаптер
@@ -71,9 +75,7 @@ public class MainActivity extends ActionBarActivity {
                 Integer page = 1;
                 bwRest.getRestClient(page, "refresh");
             }
-
         });
-
     }
 
 }
