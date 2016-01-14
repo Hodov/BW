@@ -1,9 +1,12 @@
 package budgetworld.ru.bw;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.okhttp.Callback;
@@ -17,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class UseRestClient {
@@ -113,8 +117,11 @@ public class UseRestClient {
                     int id = postJS.getInt("id");
                     String title = postJS.getJSONObject("title").getString("rendered");
                     String body = postJS.getJSONObject("excerpt").getString("rendered");
-                    String url = postJS.getJSONObject("better_featured_image").getJSONObject("media_details").getJSONObject("sizes").getJSONObject("thumbnail").getString("source_url");
-                    addPost(id, title, body, url, "end");
+                    String url = postJS.getJSONObject("better_featured_image").getJSONObject("media_details").getJSONObject("sizes").getJSONObject("large").getString("source_url");
+                    Bitmap image = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+                    //new DownloadImageTask(image).execute(url);
+                    image = getimage(url);
+                    addPost(id, title, body, url, image, "end");
                 }
             }
 
@@ -127,19 +134,24 @@ public class UseRestClient {
                     int id = postJS.getInt("id");
                     String title = postJS.getJSONObject("title").getString("rendered");
                     String body = postJS.getJSONObject("excerpt").getString("rendered");
-                    String url = postJS.getJSONObject("better_featured_image").getJSONObject("media_details").getJSONObject("sizes").getJSONObject("thumbnail").getString("source_url");
-                    addPost(id, title, body, url, a.toString());
+                    String url = postJS.getJSONObject("better_featured_image").getJSONObject("media_details").getJSONObject("sizes").getJSONObject("large").getString("source_url");
+                    
+                    Bitmap image = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+                    //new DownloadImageTask(image).execute(url);
+                    image = getimage(url);
+                    addPost(id, title, body, url, image, a.toString());
                     a++;
                 }
             }
 
 
-            private void addPost(Integer id, String title, String body, String url, String position) {
+            private void addPost(Integer id, String title, String body, String url, Bitmap image, String position) {
                 Post newPost = new Post();
                 newPost.postID = id;
                 newPost.postTitle = title;
                 newPost.postBody = body;
                 newPost.postImageURL = url;
+                newPost.postImage = image;
                 if (position == "end") {
                     posts.add(newPost);
                 } else {
@@ -164,5 +176,45 @@ public class UseRestClient {
         listView.setAdapter(adapter);
     }
 
+    private Bitmap getimage(String url) {
+        String urldisplay = url;
+        Bitmap mIcon11 = null;
+        try {
+            InputStream in = new java.net.URL(urldisplay).openStream();
+            mIcon11 = BitmapFactory.decodeStream(in);
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+            e.printStackTrace();
+        }
+        return mIcon11;
+    }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        Bitmap bmImage;
+
+        public DownloadImageTask(Bitmap bmImage) {
+            this.bmImage = bmImage;
+            System.out.println("Зашли в даунлоад имаджтаск");
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            System.out.println("Выполняем в бекграунде");
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage = result;
+        }
+
+    }
 
 }

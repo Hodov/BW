@@ -1,7 +1,11 @@
 package budgetworld.ru.bw;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +33,7 @@ public class PostsAdapter extends ArrayAdapter<Post> {
 
     @Override
     public int getCount() {
-        return posts.size()+1;
+        return posts.size() + 1;
     }
 
     @Override
@@ -38,8 +43,7 @@ public class PostsAdapter extends ArrayAdapter<Post> {
         //System.out.println(this.posts.size());
         if (position < this.posts.size()) {
             post = posts.get(position);
-        }
-        else {
+        } else {
             //System.out.println("Попытка отобразить ячейку с загрузкой");
             post.postTitle = "Загрузка...";
             post.postBody = " ";
@@ -50,21 +54,22 @@ public class PostsAdapter extends ArrayAdapter<Post> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-            // Get the data item for this position
-            Post post = getItem(position);
-            // Check if an existing view is being reused, otherwise inflate the view
-            if (convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_post, parent, false);
-            }
-            // Lookup view for data population
-            TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-            TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
-            ImageView tvImage = (ImageView) convertView.findViewById(R.id.tvImage);
-            // Populate the data into the template view using the data object
-            tvTitle.setText(Html.fromHtml(post.postTitle));
-            tvBody.setText(Html.fromHtml(post.postBody));
-            //tvImage.setI
-            // Return the completed view to render on screen
+        // Get the data item for this position
+        Post post = getItem(position);
+        // Check if an existing view is being reused, otherwise inflate the view
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_post, parent, false);
+        }
+        // Lookup view for data population
+        TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
+        TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
+        ImageView tvImage = (ImageView) convertView.findViewById(R.id.tvImage);
+        // Populate the data into the template view using the data object
+        tvTitle.setText(Html.fromHtml(post.postTitle));
+        tvBody.setText(Html.fromHtml(post.postBody));
+        tvImage.setImageBitmap(post.postImage);
+
+        // Return the completed view to render on screen
         return convertView;
     }
 }
