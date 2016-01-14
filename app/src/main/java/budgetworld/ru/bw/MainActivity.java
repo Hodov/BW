@@ -19,8 +19,8 @@ public class MainActivity extends AppCompatActivity {
         //Поехали
 
         //TOOLBAR ==================================================================
-        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
+        Toolbar main_toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(main_toolbar);
         //TOOLBAR ==================================================================
 
         // получаем первую порцию данных и заполняем адаптер

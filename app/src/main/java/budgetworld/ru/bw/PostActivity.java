@@ -12,12 +12,15 @@ public class PostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_post);
+
+
         //TOOLBAR ==================================================================
-        Toolbar toolbar = (Toolbar) findViewById(R.id.post_toolbar);
-        setSupportActionBar(toolbar);
+        Toolbar post_toolbar = (Toolbar) findViewById(R.id.post_toolbar);
+        setSupportActionBar(post_toolbar);
         //TOOLBAR ==================================================================
 
-        setContentView(R.layout.activity_post);
+
         Bundle extras = getIntent().getExtras();
         TextView textView = (TextView) findViewById(R.id.textView);
         textView.setText(Html.fromHtml(extras.getString("title")));
