@@ -18,6 +18,8 @@ public class PostActivity extends AppCompatActivity {
         //TOOLBAR ==================================================================
         Toolbar post_toolbar = (Toolbar) findViewById(R.id.post_toolbar);
         setSupportActionBar(post_toolbar);
+        getSupportActionBar().setTitle(null);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //TOOLBAR ==================================================================
 
 
