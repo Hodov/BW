@@ -7,5 +7,6 @@
     <color name="headerFont">#FFFFFF</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#727272</color>
-    <color name="main_background">#0097A7</color>
+    <color name="main_background">#FFFFFF</color>
+    <color name="main_item_background">#FFFFFF</color>
 </resources>

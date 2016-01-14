@@ -114,14 +114,23 @@ public class UseRestClient {
                 //мапим данные из Json
                 for (int a = 0; a < resultsJS.length(); a++) {
                     JSONObject postJS = resultsJS.getJSONObject(a);
+                    /*
                     int id = postJS.getInt("id");
                     String title = postJS.getJSONObject("title").getString("rendered");
                     String body = postJS.getJSONObject("excerpt").getString("rendered");
-                    String url = postJS.getJSONObject("better_featured_image").getJSONObject("media_details").getJSONObject("sizes").getJSONObject("large").getString("source_url");
                     Bitmap image = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+                    String url = "";
+                    try{
+                        url = postJS.getJSONObject("better_featured_image").getJSONObject("media_details").getJSONObject("sizes").getJSONObject("portfolio").getString("source_url");
+                        image = getimage(url);
+                    } catch (Exception e){
+                        Log.e("Error", e.getMessage());
+                        e.printStackTrace();
+                    }
                     //new DownloadImageTask(image).execute(url);
-                    image = getimage(url);
                     addPost(id, title, body, url, image, "end");
+                    */
+                    mappingData(postJS, "end");
                 }
             }
 
@@ -131,17 +140,42 @@ public class UseRestClient {
                 JSONObject postJS = resultsJS.getJSONObject(a);
                 while ((posts.get(a).postID != postJS.getInt("id")) && (a<resultsJS.length())) {
                     postJS = resultsJS.getJSONObject(a);
+                    /*
                     int id = postJS.getInt("id");
                     String title = postJS.getJSONObject("title").getString("rendered");
                     String body = postJS.getJSONObject("excerpt").getString("rendered");
-                    String url = postJS.getJSONObject("better_featured_image").getJSONObject("media_details").getJSONObject("sizes").getJSONObject("large").getString("source_url");
-                    
                     Bitmap image = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+                    String url = "";
+                    try{
+                        url = postJS.getJSONObject("better_featured_image").getJSONObject("media_details").getJSONObject("sizes").getJSONObject("portfolio").getString("source_url");
+                        image = getimage(url);
+                    } catch (Exception e){
+                        Log.e("Error", e.getMessage());
+                        e.printStackTrace();
+                    }
                     //new DownloadImageTask(image).execute(url);
-                    image = getimage(url);
                     addPost(id, title, body, url, image, a.toString());
+                    */
+                    mappingData(postJS, a.toString());
                     a++;
                 }
+            }
+
+            private void mappingData(JSONObject postJSData, String action) throws JSONException {
+                JSONObject postJS = postJSData;
+                int id = postJS.getInt("id");
+                String title = postJS.getJSONObject("title").getString("rendered");
+                String body = postJS.getJSONObject("excerpt").getString("rendered");
+                Bitmap image = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+                String url = "";
+                try{
+                    url = postJS.getJSONObject("better_featured_image").getJSONObject("media_details").getJSONObject("sizes").getJSONObject("portfolio").getString("source_url");
+                    image = getimage(url);
+                } catch (Exception e){
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                }
+                addPost(id, title, body, url, image, action);
             }
 
 

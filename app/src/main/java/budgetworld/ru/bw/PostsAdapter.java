@@ -66,7 +66,7 @@ public class PostsAdapter extends ArrayAdapter<Post> {
         ImageView tvImage = (ImageView) convertView.findViewById(R.id.tvImage);
         // Populate the data into the template view using the data object
         tvTitle.setText(Html.fromHtml(post.postTitle));
-        tvBody.setText(Html.fromHtml(post.postBody));
+        //tvBody.setText(Html.fromHtml(post.postBody));
         tvImage.setImageBitmap(post.postImage);
 
         // Return the completed view to render on screen
