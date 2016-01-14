@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -58,9 +59,11 @@ public class PostsAdapter extends ArrayAdapter<Post> {
             // Lookup view for data population
             TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
             TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
+            ImageView tvImage = (ImageView) convertView.findViewById(R.id.tvImage);
             // Populate the data into the template view using the data object
             tvTitle.setText(Html.fromHtml(post.postTitle));
             tvBody.setText(Html.fromHtml(post.postBody));
+            //tvImage.setI
             // Return the completed view to render on screen
         return convertView;
     }

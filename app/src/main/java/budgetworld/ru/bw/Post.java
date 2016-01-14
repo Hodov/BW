@@ -6,4 +6,5 @@ public class Post {
     public String postTitle;
     public String postBody;
     public String postLink;
+    public String postImageURL;
 }

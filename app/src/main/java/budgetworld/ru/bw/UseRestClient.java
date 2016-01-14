@@ -74,7 +74,6 @@ public class UseRestClient {
             public void onResponse(final Response response) throws IOException {
                 try {
                     String responseData = response.body().string();
-                    System.out.println(responseData);
                     JSONArray jsonArr = new JSONArray(responseData);
                     //final Posts posts = new Posts(jsonArr);
                     if ((action == "load") || (posts.isEmpty())) {
@@ -82,7 +81,6 @@ public class UseRestClient {
                     }
                     else if (action == "refresh") {
                         this.mapPostsRefresh(jsonArr);
-                        System.out.println("Мапим новые данные");
                     }
                     //мы должны обновить UI===============
                     activity.runOnUiThread(new Runnable() {
@@ -92,7 +90,6 @@ public class UseRestClient {
                             if (action == "refresh") {
                                 mSwipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.activity_main_swipe_refresh_layout);
                                 mSwipeRefreshLayout.setRefreshing(false);
-                                System.out.println("Отключаем рефреш адаптер");
                             }
                             updatePosts(activity);
                         }
@@ -113,7 +110,11 @@ public class UseRestClient {
                 //мапим данные из Json
                 for (int a = 0; a < resultsJS.length(); a++) {
                     JSONObject postJS = resultsJS.getJSONObject(a);
-                    addPost(postJS.getInt("id"), postJS.getJSONObject("title").getString("rendered"), postJS.getJSONObject("excerpt").getString("rendered"), "end");
+                    int id = postJS.getInt("id");
+                    String title = postJS.getJSONObject("title").getString("rendered");
+                    String body = postJS.getJSONObject("excerpt").getString("rendered");
+                    String url = postJS.getJSONObject("better_featured_image").getJSONObject("media_details").getJSONObject("sizes").getJSONObject("thumbnail").getString("source_url");
+                    addPost(id, title, body, url, "end");
                 }
             }
 
@@ -121,19 +122,24 @@ public class UseRestClient {
                 //мапим данные из Json
                 Integer a = 0;
                 JSONObject postJS = resultsJS.getJSONObject(a);
-                while ((posts.get(a).postID != postJS.getInt("id")) && (a<=resultsJS.length())) {
+                while ((posts.get(a).postID != postJS.getInt("id")) && (a<resultsJS.length())) {
                     postJS = resultsJS.getJSONObject(a);
-                    addPost(postJS.getInt("id"), postJS.getJSONObject("title").getString("rendered"), postJS.getJSONObject("excerpt").getString("rendered"), a.toString());
+                    int id = postJS.getInt("id");
+                    String title = postJS.getJSONObject("title").getString("rendered");
+                    String body = postJS.getJSONObject("excerpt").getString("rendered");
+                    String url = postJS.getJSONObject("better_featured_image").getJSONObject("media_details").getJSONObject("sizes").getJSONObject("thumbnail").getString("source_url");
+                    addPost(id, title, body, url, a.toString());
                     a++;
                 }
             }
 
 
-            private void addPost(Integer id, String title, String body, String position) {
+            private void addPost(Integer id, String title, String body, String url, String position) {
                 Post newPost = new Post();
                 newPost.postID = id;
                 newPost.postTitle = title;
                 newPost.postBody = body;
+                newPost.postImageURL = url;
                 if (position == "end") {
                     posts.add(newPost);
                 } else {

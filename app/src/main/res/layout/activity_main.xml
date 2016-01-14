@@ -20,7 +20,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/lvItems"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/textView2" />
+            android:layout_below="@+id/textView2"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="15sp"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
