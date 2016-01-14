@@ -17,9 +17,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Andrey on 26.12.2015.
- */
+
 public class PostsAdapter extends ArrayAdapter<Post> {
 
     private ArrayList<Post> posts;

@@ -1,25 +1,21 @@
 package budgetworld.ru.bw;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
 
-/**
- * Created by skorokhodov_a on 11.01.2016.
- */
-public class PostActivity extends ActionBarActivity {
+public class PostActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBar actionBar = getSupportActionBar(); // or getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+        //TOOLBAR ==================================================================
+        Toolbar toolbar = (Toolbar) findViewById(R.id.post_toolbar);
+        setSupportActionBar(toolbar);
+        //TOOLBAR ==================================================================
 
         setContentView(R.layout.activity_post);
         Bundle extras = getIntent().getExtras();
