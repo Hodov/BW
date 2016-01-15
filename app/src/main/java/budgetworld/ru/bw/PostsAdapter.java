@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,6 @@ public class PostsAdapter extends ArrayAdapter<Post> {
 
     private ArrayList<Post> posts;
     //Context context;
-
 
     public PostsAdapter(Context context, ArrayList<Post> posts) {
         super(context, 0, posts);
@@ -37,14 +38,10 @@ public class PostsAdapter extends ArrayAdapter<Post> {
     @Override
     public Post getItem(int position) {
         Post post = new Post();
-        //System.out.println(position);
-        //System.out.println(this.posts.size());
         if (position < this.posts.size()) {
             post = posts.get(position);
         } else {
-            //System.out.println("Попытка отобразить ячейку с загрузкой");
             post.postTitle = "Загрузка...";
-            post.postBody = " ";
         }
         return post;
     }
@@ -60,13 +57,20 @@ public class PostsAdapter extends ArrayAdapter<Post> {
         }
         // Lookup view for data population
         TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-        TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
+        //TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
         ImageView tvImage = (ImageView) convertView.findViewById(R.id.tvImage);
         // Populate the data into the template view using the data object
         tvTitle.setText(Html.fromHtml(post.postTitle));
         //tvBody.setText(Html.fromHtml(post.postBody));
-        tvImage.setImageBitmap(post.postImage);
 
+
+        if (post.postImageURL != "") {
+            Picasso
+                    .with(getContext())
+                    .load(post.postImageURL)
+                    .resize(1080, 0)
+                    .into(tvImage);
+        }
         // Return the completed view to render on screen
         return convertView;
     }

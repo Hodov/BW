@@ -20,7 +20,7 @@
             android:text="@string/header"
             android:gravity="center"
             android:layout_gravity="center"
-            android:textSize="20dp"
+            android:textSize="24dp"
             android:textColor="@color/headerFont"/>
     </android.support.v7.widget.Toolbar>
 

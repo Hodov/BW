@@ -25,16 +25,12 @@ import java.util.ArrayList;
 
 public class UseRestClient {
 
-    private String url1 = "http://demo.wp-api.org/wp-json/wp/v2/posts";
-    private String url2 = "https://api.github.com/users/codepath";
    // private String urlBasic = "http://bardarbunga.info/wp-json/wp/v2/posts";
-    private String url4 = "http://budgetworld.ru/wp-json/wp/v2/posts";
     private String urlBasic = "http://budgetworld.ru/wp-json/wp/v2/posts";
     Activity activity;
     ArrayList<Post> posts = new ArrayList<Post>();
     PostsAdapter adapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
-
 
     public UseRestClient(Activity _activity) {
         activity = _activity;
@@ -60,7 +56,7 @@ public class UseRestClient {
                 System.out.println("ОШИБКА");
                 System.out.println(e);
                 mSwipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.activity_main_swipe_refresh_layout);
-                if (mSwipeRefreshLayout.isRefreshing()){
+                if (mSwipeRefreshLayout.isRefreshing()) {
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
 
@@ -71,7 +67,6 @@ public class UseRestClient {
                         toast.show();
                     }
                 });
-
             }
 
             @Override
@@ -82,15 +77,13 @@ public class UseRestClient {
                     //final Posts posts = new Posts(jsonArr);
                     if ((action == "load") || (posts.isEmpty())) {
                         this.mapPosts(jsonArr);
-                    }
-                    else if (action == "refresh") {
+                    } else if (action == "refresh") {
                         this.mapPostsRefresh(jsonArr);
                     }
-                    //мы должны обновить UI===============
+                    //мы должны обновить UI
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //TODO: update your UI
                             if (action == "refresh") {
                                 mSwipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.activity_main_swipe_refresh_layout);
                                 mSwipeRefreshLayout.setRefreshing(false);
@@ -98,8 +91,6 @@ public class UseRestClient {
                             updatePosts(activity);
                         }
                     });
-                    //====================================
-
                 } catch (JSONException e) {
                     //написать клиенту про траблы
                     System.out.println("Не вышло");
@@ -114,22 +105,6 @@ public class UseRestClient {
                 //мапим данные из Json
                 for (int a = 0; a < resultsJS.length(); a++) {
                     JSONObject postJS = resultsJS.getJSONObject(a);
-                    /*
-                    int id = postJS.getInt("id");
-                    String title = postJS.getJSONObject("title").getString("rendered");
-                    String body = postJS.getJSONObject("excerpt").getString("rendered");
-                    Bitmap image = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
-                    String url = "";
-                    try{
-                        url = postJS.getJSONObject("better_featured_image").getJSONObject("media_details").getJSONObject("sizes").getJSONObject("portfolio").getString("source_url");
-                        image = getimage(url);
-                    } catch (Exception e){
-                        Log.e("Error", e.getMessage());
-                        e.printStackTrace();
-                    }
-                    //new DownloadImageTask(image).execute(url);
-                    addPost(id, title, body, url, image, "end");
-                    */
                     mappingData(postJS, "end");
                 }
             }
@@ -138,59 +113,41 @@ public class UseRestClient {
                 //мапим данные из Json
                 Integer a = 0;
                 JSONObject postJS = resultsJS.getJSONObject(a);
-                while ((posts.get(a).postID != postJS.getInt("id")) && (a<resultsJS.length())) {
+                while ((posts.get(a).postID != postJS.getInt("id")) && (a < resultsJS.length())) {
                     postJS = resultsJS.getJSONObject(a);
-                    /*
-                    int id = postJS.getInt("id");
-                    String title = postJS.getJSONObject("title").getString("rendered");
-                    String body = postJS.getJSONObject("excerpt").getString("rendered");
-                    Bitmap image = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
-                    String url = "";
-                    try{
-                        url = postJS.getJSONObject("better_featured_image").getJSONObject("media_details").getJSONObject("sizes").getJSONObject("portfolio").getString("source_url");
-                        image = getimage(url);
-                    } catch (Exception e){
-                        Log.e("Error", e.getMessage());
-                        e.printStackTrace();
-                    }
-                    //new DownloadImageTask(image).execute(url);
-                    addPost(id, title, body, url, image, a.toString());
-                    */
                     mappingData(postJS, a.toString());
                     a++;
                 }
             }
 
-            private void mappingData(JSONObject postJSData, String action) throws JSONException {
+            private void mappingData(JSONObject postJSData, String place) throws JSONException {
                 JSONObject postJS = postJSData;
                 int id = postJS.getInt("id");
                 String title = postJS.getJSONObject("title").getString("rendered");
                 String body = postJS.getJSONObject("excerpt").getString("rendered");
-                Bitmap image = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
                 String url = "";
-                try{
+                try {
                     url = postJS.getJSONObject("better_featured_image").getJSONObject("media_details").getJSONObject("sizes").getJSONObject("portfolio").getString("source_url");
-                    image = getimage(url);
-                } catch (Exception e){
+                    //url = postJS.getJSONObject("better_featured_image").getString("source_url");
+                } catch (Exception e) {
                     Log.e("Error", e.getMessage());
                     e.printStackTrace();
                 }
-                addPost(id, title, body, url, image, action);
+                addPost(id, title, body, url, place);
             }
 
 
-            private void addPost(Integer id, String title, String body, String url, Bitmap image, String position) {
+            private void addPost(Integer id, String title, String body, String url, String position) {
                 Post newPost = new Post();
                 newPost.postID = id;
                 newPost.postTitle = title;
                 newPost.postBody = body;
                 newPost.postImageURL = url;
-                newPost.postImage = image;
                 if (position == "end") {
                     posts.add(newPost);
                 } else {
                     Integer i = Integer.valueOf(position);
-                    posts.add(i,newPost);
+                    posts.add(i, newPost);
                 }
             }
 
@@ -204,51 +161,12 @@ public class UseRestClient {
     public void drawPosts(Activity _activity) {
         // Create the adapter to convert the array to views
        // PostsAdapter adapter = new PostsAdapter(_activity, posts);
+        getRestClient(1, "load");
         adapter = new PostsAdapter(_activity, posts);
         // Attach the adapter to a ListView
         ListView listView = (ListView) _activity.findViewById(R.id.lvItems);
         listView.setAdapter(adapter);
     }
 
-    private Bitmap getimage(String url) {
-        String urldisplay = url;
-        Bitmap mIcon11 = null;
-        try {
-            InputStream in = new java.net.URL(urldisplay).openStream();
-            mIcon11 = BitmapFactory.decodeStream(in);
-        } catch (Exception e) {
-            Log.e("Error", e.getMessage());
-            e.printStackTrace();
-        }
-        return mIcon11;
-    }
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        Bitmap bmImage;
-
-        public DownloadImageTask(Bitmap bmImage) {
-            this.bmImage = bmImage;
-            System.out.println("Зашли в даунлоад имаджтаск");
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            System.out.println("Выполняем в бекграунде");
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage = result;
-        }
-
-    }
 
 }

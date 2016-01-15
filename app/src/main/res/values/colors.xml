@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="statusBar">#303F9F</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="actionBar">#3F51B5</color>
-    <color name="headerFont">#C5CAE9</color>
-    <color name="primary_text">#3F51B5</color>
+
+    <color name="statusBar">#0097A7</color>
+    <color name="actionBar">#00BCD4</color>
+
+    <color name="headerFont">#FFFFFF</color>
+    <color name="primary_text">#212121</color>
     <color name="secondary_text">#727272</color>
-    <color name="main_background">#FFFFFF</color>
+
+    <color name="main_background">#FFE9E9E9</color>
     <color name="main_item_background">#FFFFFF</color>
+    <color name="devider">#FFFFFF</color>
 </resources>
