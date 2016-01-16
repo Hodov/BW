@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_item_background">
+    android:background="@color/main_item_background"
+    android:elevation="10dp">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -26,12 +27,18 @@
         android:gravity="center"
         android:layout_gravity="center_horizontal"/>
 
-    <TextView
+<!--    <TextView
         android:id="@+id/tvBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/secondary_text"
         android:layout_gravity="center_horizontal" />
+-->
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="15dp"
+        android:background="#FFFFFF"/>
 
     <View
         android:layout_width="fill_parent"

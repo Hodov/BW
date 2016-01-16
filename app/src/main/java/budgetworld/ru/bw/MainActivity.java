@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         // получаем первую порцию данных и заполняем адаптер
         final UseRestClient bwRest = new UseRestClient(this);
         bwRest.drawPosts(this);
-        bwRest.getRestClient(1, "load");
+        //bwRest.getRestClient(1, "load");
 
         //находим лист вью
         ListView lvItems = (ListView) findViewById(R.id.lvItems);
