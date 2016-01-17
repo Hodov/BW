@@ -6,18 +6,34 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 public class MainActivity extends AppCompatActivity {
+
+    /**
+     * The {@link Tracker} used to record screen views.
+     */
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Поехали
+
+        // [START shared_tracker]
+        // Obtain the shared Tracker instance.
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        sendScreenName();
+        // [END shared_tracker]
 
         //TOOLBAR ==================================================================
         Toolbar main_toolbar = (Toolbar) findViewById(R.id.main_toolbar);
@@ -77,6 +93,20 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sendScreenName();
+    }
+
+    private void sendScreenName() {
+        String name = "MainActivity_BW";
+        // [START screen_view_hit]
+        mTracker.setScreenName(name);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        // [END screen_view_hit]
     }
 
 }

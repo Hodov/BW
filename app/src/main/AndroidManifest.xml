@@ -3,6 +3,7 @@
     package="budgetworld.ru.bw">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
 
     <application
@@ -10,7 +11,9 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/header"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name=".AnalyticsApplication">
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop">
