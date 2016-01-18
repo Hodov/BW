@@ -74,6 +74,10 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("title", bwRest.posts.get(position).postTitle);
                 intent.putExtra("link", bwRest.posts.get(position).postLink);
                 startActivity(intent);
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Click" + bwRest.posts.get(position).postTitle)
+                        .build());
 
             }
         });
@@ -83,8 +87,13 @@ public class MainActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Refresh")
+                        .build());
                 Integer page = 1;
                 bwRest.getRestClient(page, "refresh");
+
             }
         });
     }

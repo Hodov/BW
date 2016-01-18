@@ -11,13 +11,31 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 
 public class PostActivity extends AppCompatActivity {
+
     ProgressBar myProgressBar;
+
+    /**
+     * The {@link Tracker} used to record screen views.
+     */
+    private Tracker mTracker;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+
+        // [START shared_tracker]
+        // Obtain the shared Tracker instance.
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        sendScreenName();
+        // [END shared_tracker]
 
         //TOOLBAR ==================================================================
         Toolbar post_toolbar = (Toolbar) findViewById(R.id.post_toolbar);
@@ -51,5 +69,13 @@ public class PostActivity extends AppCompatActivity {
         System.out.println(extras.getString("link"));
         webView.loadUrl(extras.getString("link"));
 
+    }
+
+    private void sendScreenName() {
+        String name = "WebView_BW";
+        // [START screen_view_hit]
+        mTracker.setScreenName(name);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        // [END screen_view_hit]
     }
 }
