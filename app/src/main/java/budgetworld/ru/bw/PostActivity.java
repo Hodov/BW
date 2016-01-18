@@ -8,11 +8,12 @@ import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
 public class PostActivity extends AppCompatActivity {
-
+    ProgressBar myProgressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,11 +25,25 @@ public class PostActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(null);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //TOOLBAR ==================================================================
+
+        myProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         WebView webView = (WebView) findViewById(R.id.webView);
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        webView.setWebViewClient(new MyBrowser());
+        webView.setWebChromeClient(new WebChromeClient(){
+
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                myProgressBar.setProgress(newProgress);
+                //change your progress bar
+                if (newProgress == 100) {
+                    myProgressBar.setVisibility(View.INVISIBLE);
+                }
+            }
+
+
+        });
 
         Bundle extras = getIntent().getExtras();
         TextView textView = (TextView) findViewById(R.id.textView);
@@ -36,14 +51,5 @@ public class PostActivity extends AppCompatActivity {
         System.out.println(extras.getString("link"));
         webView.loadUrl(extras.getString("link"));
 
-    }
-
-    // Manages the behavior when URLs are loaded
-    private class MyBrowser extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-        }
     }
 }
