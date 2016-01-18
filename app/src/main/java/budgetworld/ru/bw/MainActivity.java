@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
             public boolean onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to your AdapterView
-                System.out.println(page);
-                bwRest.getRestClient(page, "load");
+                System.out.println(page-1);
+                bwRest.getRestClient(page-1, "load");
                 // or customLoadMoreDataFromApi(totalItemsCount);
                 return true; // ONLY if more data is actually being loaded; false otherwise.
             }
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, PostActivity.class);
                 intent.putExtra("position", position);
                 intent.putExtra("title", bwRest.posts.get(position).postTitle);
+                intent.putExtra("link", bwRest.posts.get(position).postLink);
                 startActivity(intent);
 
             }

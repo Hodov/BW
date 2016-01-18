@@ -64,13 +64,20 @@ public class PostsAdapter extends ArrayAdapter<Post> {
         //tvBody.setText(Html.fromHtml(post.postBody));
 
 
-        if (post.postImageURL != "") {
+
+/*
+            Picasso
+                    .with(getContext())
+                    .cancelRequest(tvImage);
+*/
             Picasso
                     .with(getContext())
                     .load(post.postImageURL)
-                    .resize(1080, 0)
+                    .fit()
+                    .placeholder(R.drawable.no_image)
+                    .error(R.drawable.no_image)
                     .into(tvImage);
-        }
+
         // Return the completed view to render on screen
         return convertView;
     }

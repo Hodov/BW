@@ -28,6 +28,7 @@ public class UseRestClient {
 
    // private String urlBasic = "http://bardarbunga.info/wp-json/wp/v2/posts";
     private String urlBasic = "http://budgetworld.ru/wp-json/wp/v2/posts";
+    private String noImageURL = "http://butchbellah.com/wp-content/uploads/2012/08/no1.jpg";
     Activity activity;
     ArrayList<Post> posts = new ArrayList<Post>();
     PostsAdapter adapter;
@@ -126,24 +127,27 @@ public class UseRestClient {
                 int id = postJS.getInt("id");
                 String title = postJS.getJSONObject("title").getString("rendered");
                 String body = postJS.getJSONObject("excerpt").getString("rendered");
+                String link = postJS.getString("link");
                 String url = "";
                 try {
-                    url = postJS.getJSONObject("better_featured_image").getJSONObject("media_details").getJSONObject("sizes").getJSONObject("portfolio").getString("source_url");
-                    //url = postJS.getJSONObject("better_featured_image").getString("source_url");
+                    //url = postJS.getJSONObject("better_featured_image").getJSONObject("media_details").getJSONObject("sizes").getJSONObject("portfolio").getString("source_url");
+                    url = postJS.getJSONObject("better_featured_image").getString("source_url");
                 } catch (Exception e) {
+                    url = noImageURL;
                     Log.e("Error", e.getMessage());
                     e.printStackTrace();
                 }
-                addPost(id, title, body, url, place);
+                addPost(id, title, body, url, link, place);
             }
 
 
-            private void addPost(Integer id, String title, String body, String url, String position) {
+            private void addPost(Integer id, String title, String body, String url, String link, String position) {
                 Post newPost = new Post();
                 newPost.postID = id;
                 newPost.postTitle = title;
                 newPost.postBody = body;
                 newPost.postImageURL = url;
+                newPost.postLink = link;
                 if (position == "end") {
                     posts.add(newPost);
                 } else {
@@ -162,7 +166,7 @@ public class UseRestClient {
     public void drawPosts(Activity _activity) {
         // Create the adapter to convert the array to views
        // PostsAdapter adapter = new PostsAdapter(_activity, posts);
-        getRestClient(1, "load");
+        //getRestClient(1, "load");
         adapter = new PostsAdapter(_activity, posts);
         // Attach the adapter to a ListView
         ListView listView = (ListView) _activity.findViewById(R.id.lvItems);
