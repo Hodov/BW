@@ -59,8 +59,6 @@ public class PostActivity extends AppCompatActivity {
                     myProgressBar.setVisibility(View.INVISIBLE);
                 }
             }
-
-
         });
 
         Bundle extras = getIntent().getExtras();

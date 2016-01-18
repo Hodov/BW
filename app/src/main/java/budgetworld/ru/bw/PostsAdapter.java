@@ -63,13 +63,6 @@ public class PostsAdapter extends ArrayAdapter<Post> {
         tvTitle.setText(Html.fromHtml(post.postTitle));
         //tvBody.setText(Html.fromHtml(post.postBody));
 
-
-
-/*
-            Picasso
-                    .with(getContext())
-                    .cancelRequest(tvImage);
-*/
             Picasso
                     .with(getContext())
                     .load(post.postImageURL)

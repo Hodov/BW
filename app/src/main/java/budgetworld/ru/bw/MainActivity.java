@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -58,7 +59,15 @@ public class MainActivity extends AppCompatActivity {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to your AdapterView
                 System.out.println(page-1);
-                bwRest.getRestClient(page-1, "load");
+                bwRest.getRestClient(page - 1, "load");
+
+                //GOOGLE ANALYTICS=================================================================
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Page " + page)
+                        .build());
+                //GOOGLE ANALYTICS=================================================================
+
                 // or customLoadMoreDataFromApi(totalItemsCount);
                 return true; // ONLY if more data is actually being loaded; false otherwise.
             }
@@ -76,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 mTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Action")
-                        .setAction("Click" + bwRest.posts.get(position).postTitle)
+                        .setAction("Click " + Html.fromHtml(bwRest.posts.get(position).postTitle))
                         .build());
 
             }
