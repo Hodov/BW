@@ -29,6 +29,12 @@
             android:parentActivityName=".MainActivity"
             android:label="@string/header">
         </activity>
+
+        <activity android:name=".AviasalesActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="@string/header">
+        </activity>
+
     </application>
 
 </manifest>

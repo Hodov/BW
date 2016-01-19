@@ -4,6 +4,7 @@
     <item
         android:id="@+id/miSearch"
         android:icon="@android:drawable/ic_menu_search"
+        android:onClick="onSearchAction"
         app:showAsAction="ifRoom"
         android:title="Search">
     </item>

@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -126,6 +127,12 @@ public class MainActivity extends AppCompatActivity {
         mTracker.setScreenName(name);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         // [END screen_view_hit]
+    }
+
+    public void onSearchAction(MenuItem mi) {
+        // handle click here
+        Intent intent = new Intent(MainActivity.this, AviasalesActivity.class);
+        startActivity(intent);
     }
 
 }
