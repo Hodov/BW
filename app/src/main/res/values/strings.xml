@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">BW</string>
     <string name="header">Budget World</string>
-    <string name="connection_troubles">Траблы с инетом</string>
-    <string name="json_troubles">Траблы с JSON</string>
+    <string name="connection_troubles">Проверьте интернет-соединение</string>
+    <string name="json_troubles">Возникла ошибка, обратитесь к разработчику</string>
 </resources>

@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -28,7 +29,7 @@ public class UseRestClient {
 
    // private String urlBasic = "http://bardarbunga.info/wp-json/wp/v2/posts";
     private String urlBasic = "http://budgetworld.ru/wp-json/wp/v2/posts";
-    private String noImageURL = "http://butchbellah.com/wp-content/uploads/2012/08/no1.jpg";
+    private String noImageURL = "http://bloggfiler.no/anniegetyourgun.blogg.no/images/1104500-9-1382626375921-n500.jpg";
     Activity activity;
     ArrayList<Post> posts = new ArrayList<Post>();
     PostsAdapter adapter;
@@ -65,8 +66,13 @@ public class UseRestClient {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast toast = Toast.makeText(activity, R.string.connection_troubles, Toast.LENGTH_LONG);
-                        toast.show();
+                        //Toast toast = Toast.makeText(activity, R.string.connection_troubles, Toast.LENGTH_LONG);
+                        //toast.show();
+                        LinearLayout mRootLayout = (LinearLayout) activity.findViewById(R.id.rootLayout);
+                        Snackbar
+                                .make(mRootLayout, R.string.connection_troubles, Snackbar.LENGTH_LONG)
+                                .show();
+
                     }
                 });
             }
@@ -97,8 +103,12 @@ public class UseRestClient {
                     //написать клиенту про траблы
                     System.out.println("Не вышло");
                     System.out.println(e);
-                    Toast toast = Toast.makeText(activity, R.string.json_troubles, Toast.LENGTH_LONG);
-                    toast.show();
+                    //Toast toast = Toast.makeText(activity, R.string.json_troubles, Toast.LENGTH_LONG);
+                    //toast.show();
+                    LinearLayout mRootLayout = (LinearLayout) activity.findViewById(R.id.rootLayout);
+                    Snackbar
+                            .make(mRootLayout, R.string.json_troubles, Snackbar.LENGTH_LONG)
+                            .show();
 
                 }
             }

@@ -64,7 +64,6 @@ public class PostActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         TextView textView = (TextView) findViewById(R.id.textView);
         textView.setText(Html.fromHtml(extras.getString("title")));
-        System.out.println(extras.getString("link"));
         webView.loadUrl(extras.getString("link"));
 
     }

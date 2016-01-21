@@ -67,8 +67,6 @@ public class PostsAdapter extends ArrayAdapter<Post> {
                     .with(getContext())
                     .load(post.postImageURL)
                     .fit()
-                    .placeholder(R.drawable.no_image)
-                    .error(R.drawable.no_image)
                     .into(tvImage);
 
         // Return the completed view to render on screen

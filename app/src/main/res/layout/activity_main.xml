@@ -8,7 +8,8 @@
     android:layout_height="match_parent"
     android:background="@color/main_background"
     tools:context="budgetworld.ru.bw.MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/rootLayout">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/main_toolbar"
@@ -50,6 +51,7 @@
                 android:dividerHeight="20sp"/>
 
         </android.support.v4.widget.SwipeRefreshLayout>
+
 
     </RelativeLayout>
 
