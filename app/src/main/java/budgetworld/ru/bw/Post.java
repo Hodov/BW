@@ -10,4 +10,5 @@ public class Post {
     public String postLink;
     public String postImageURL;
     public Bitmap postImage;
+    public Boolean postShowImage;
 }

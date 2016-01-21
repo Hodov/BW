@@ -39,9 +39,12 @@ public class PostsAdapter extends ArrayAdapter<Post> {
     public Post getItem(int position) {
         Post post = new Post();
         if (position < this.posts.size()) {
+
             post = posts.get(position);
+            post.postShowImage = true;
         } else {
             post.postTitle = "Загрузка...";
+            post.postShowImage = false;
         }
         return post;
     }
@@ -63,11 +66,17 @@ public class PostsAdapter extends ArrayAdapter<Post> {
         tvTitle.setText(Html.fromHtml(post.postTitle));
         //tvBody.setText(Html.fromHtml(post.postBody));
 
-            Picasso
-                    .with(getContext())
-                    .load(post.postImageURL)
-                    .fit()
-                    .into(tvImage);
+        tvImage.setVisibility(View.VISIBLE);
+
+        Picasso
+                .with(getContext())
+                .load(post.postImageURL)
+                .fit()
+                .into(tvImage);
+
+        if (!post.postShowImage) {
+            tvImage.setVisibility(View.GONE);
+        }
 
         // Return the completed view to render on screen
         return convertView;

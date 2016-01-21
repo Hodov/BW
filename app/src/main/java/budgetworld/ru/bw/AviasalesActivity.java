@@ -24,7 +24,7 @@ public class AviasalesActivity extends AppCompatActivity{
      */
     private Tracker mTracker;
     ProgressBar myProgressBar;
-    String searchURL = "http://search.budgetworld.ru/m/flights/ru/?marker=31347.tpcalwt";
+    String searchURL = "http://search.budgetworld.ru/m/flights/ru/?mobile_redirect=true&marker=31347.tpcalwt&currency=RUB";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
