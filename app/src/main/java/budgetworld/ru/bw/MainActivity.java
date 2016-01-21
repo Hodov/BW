@@ -48,35 +48,27 @@ public class MainActivity extends AppCompatActivity {
         // получаем первую порцию данных и заполняем адаптер
         final UseRestClient bwRest = new UseRestClient(this);
         bwRest.drawPosts(this);
-        //bwRest.getRestClient(1, "load");
 
         //находим лист вью
         ListView lvItems = (ListView) findViewById(R.id.lvItems);
         //находим рефреш адаптер
         SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
 
-        //слушаем конец списка
+        //СЛУШАЕМ КОНЕЦ СПИСКА
         lvItems.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to your AdapterView
                 bwRest.getRestClient(page - 1, "load");
-
-                //GOOGLE ANALYTICS=================================================================
-                mTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Action")
-                        .setAction("Page " + page)
-                        .build());
-                //GOOGLE ANALYTICS=================================================================
-
+                sendGoogleAction("Scroll", "Page " + page);
                 // or customLoadMoreDataFromApi(totalItemsCount);
                 return true; // ONLY if more data is actually being loaded; false otherwise.
             }
         });
         //==================
 
-        //слушаем клик
+        //СЛУШАЕМ КЛИК ПО ЛИСТВЬЮ
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -85,26 +77,18 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("title", bwRest.posts.get(position).postTitle);
                 intent.putExtra("link", bwRest.posts.get(position).postLink);
                 startActivity(intent);
-                mTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Action")
-                        .setAction("Click " + Html.fromHtml(bwRest.posts.get(position).postTitle))
-                        .build());
-
+                sendGoogleAction("Move",String.valueOf(Html.fromHtml(bwRest.posts.get(position).postTitle)));
             }
         });
         //==================
 
-        //слушаем рефреш адаптер
+        //СЛУШАЕМ РЕФРЕШ АДАПТЕР
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Action")
-                        .setAction("Refresh")
-                        .build());
+                sendGoogleAction("Action", "Refresh");
                 Integer page = 1;
                 bwRest.getRestClient(page, "refresh");
-
             }
         });
     }
@@ -112,9 +96,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
         return true;
     }
 
@@ -126,10 +108,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendScreenName() {
         String name = "MainActivity_BW";
-        // [START screen_view_hit]
         mTracker.setScreenName(name);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        // [END screen_view_hit]
     }
 
     public void onSearchAction(MenuItem mi) {
@@ -139,14 +119,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onShareAction(MenuItem mi) {
+
+        //GOOGLE ANALYTICS
+        sendGoogleAction("Action", "Share");
+
         // handle click here
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, shareText);
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
+    }
 
-
+    public void sendGoogleAction(String category, String description) {
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory(category)
+                .setAction(description)
+                .build());
     }
 
 }
