@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!--
     <item
         android:id="@+id/miSearch"
         android:icon="@android:drawable/ic_menu_search"
         android:onClick="onSearchAction"
         app:showAsAction="ifRoom"
         android:title="Search">
+    </item>
+-->
+    <item
+        android:id="@+id/miShare"
+        android:icon="@android:drawable/ic_menu_share"
+        android:onClick="onShareAction"
+        app:showAsAction="ifRoom"
+        android:title="Share">
     </item>
 </menu>

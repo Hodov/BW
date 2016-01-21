@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ShareActionProvider;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -23,13 +24,14 @@ public class MainActivity extends AppCompatActivity {
      * The {@link Tracker} used to record screen views.
      */
     private Tracker mTracker;
+    private String shareText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Поехали
-
+        shareText = getResources().getString(R.string.share_Text);
         // [START shared_tracker]
         // Obtain the shared Tracker instance.
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
@@ -110,7 +112,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
 
@@ -132,6 +136,17 @@ public class MainActivity extends AppCompatActivity {
         // handle click here
         Intent intent = new Intent(MainActivity.this, AviasalesActivity.class);
         startActivity(intent);
+    }
+
+    public void onShareAction(MenuItem mi) {
+        // handle click here
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
+
+
     }
 
 }

@@ -10,6 +10,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -51,6 +52,7 @@ public class AviasalesActivity extends AppCompatActivity{
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+        webView.setInitialScale(50);
 
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -64,11 +66,18 @@ public class AviasalesActivity extends AppCompatActivity{
         });
 
         webView.setWebViewClient(new WebViewClient() {
-            @Override
+
+            //@Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
                 return false;
             }
+
+            public void onReceivedError(WebView view, int errorCod,String description, String failingUrl) {
+                Toast.makeText(getBaseContext(), "Your Internet Connection May not be active Or " + description , Toast.LENGTH_LONG).show();
+                System.out.println(errorCod+description);
+            }
+
         });
 
         webView.loadUrl(searchURL);
