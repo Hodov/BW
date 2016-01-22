@@ -1,8 +1,10 @@
 package budgetworld.ru.bw;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,7 +15,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.ShareActionProvider;
+
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import android.support.v4.content.LocalBroadcastManager;
+import android.content.SharedPreferences;
+import android.util.Log;
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -25,12 +36,21 @@ public class MainActivity extends AppCompatActivity {
      */
     private Tracker mTracker;
     private String shareText;
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private static final String TAG = "MainActivity";
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Поехали
+        /*
+        Server API Key help
+        AIzaSyAlICMX1bjMbh42r58EMTwy8tckX38TgiA
+        Sender ID help
+        491752260292
+        */
         shareText = getResources().getString(R.string.share_Text);
         // [START shared_tracker]
         // Obtain the shared Tracker instance.
@@ -91,6 +111,33 @@ public class MainActivity extends AppCompatActivity {
                 bwRest.getRestClient(page, "refresh");
             }
         });
+
+
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+                boolean sentToken = sharedPreferences
+                        .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
+                if (!sentToken) {System.out.println("Токен не отправлен");}
+                if (sentToken) {
+                   System.out.println(getString(R.string.gcm_send_message));
+                    Toast toast = Toast.makeText(getApplication(), getString(R.string.gcm_send_message), Toast.LENGTH_LONG);
+                    toast.show();
+                } else {
+                    System.out.println(getString(R.string.token_error_message));
+                }
+            }
+        };
+
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
+
     }
 
     @Override
@@ -100,17 +147,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        sendScreenName();
-    }
-
-    private void sendScreenName() {
-        String name = "MainActivity_BW";
-        mTracker.setScreenName(name);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-    }
 
     public void onSearchAction(MenuItem mi) {
         // handle click here
@@ -136,6 +172,48 @@ public class MainActivity extends AppCompatActivity {
                 .setCategory(category)
                 .setAction(description)
                 .build());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        sendScreenName();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        super.onPause();
+    }
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private void sendScreenName() {
+        String name = "MainActivity_BW";
+        mTracker.setScreenName(name);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
 }
