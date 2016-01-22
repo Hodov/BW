@@ -147,8 +147,7 @@ public class MainActivity extends AppCompatActivity {
                         .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
                 if (sentToken) {
                     System.out.println(getString(R.string.gcm_send_message));
-
-                    sendTokenNotify();
+                    //sendTokenNotify();
                 } else {
                     System.out.println(getString(R.string.token_error_message));
                 }
@@ -228,49 +227,5 @@ public class MainActivity extends AppCompatActivity {
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
-
-    private void sendTokenNotify() {
-        OkHttpClient client = new OkHttpClient();
-
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://bardarbunga.info/pnfw/register/").newBuilder();
-        //urlBuilder.addQueryParameter("token", "eIMBweVd6KA:APA91bFIJA2ciw6LHZoRpQYIjNOOq5i8IHmd34miAkHWIVLqWnB1ru4_-ujLqmXcMqK20HGkW8CX3oKRuf2j2Hibyzo3A-yut4a1HCtjezIX5U1NQ6o-fFz-eqEBOWIyt9AcsPBf8iPp");
-        //urlBuilder.addQueryParameter("os", "Android");
-        //urlBuilder.addQueryParameter("email", "ihodov@gmail.com");
-        String url = urlBuilder.build().toString();
-        System.out.println(url);
-
-        RequestBody formBody = new FormEncodingBuilder()
-                .add("token", "eIMBweVd6KA:APA91bFIJA2ciw6LHZoRpQYIjNOOq5i8IHmd34miAkHWIVLqWnB1ru4_-ujLqmXcMqK20HGkW8CX3oKRuf2j2Hibyzo3A-yut4a1HCtjezIX5U1NQ6o-fFz-eqEBOWIyt9AcsPBf8iPp")
-                .add("os", "Android")
-                .add("email", "ahodov@yandex.ru")
-                .build();
-
-        Request request = new Request.Builder()
-                .url(url)
-                .post(formBody)
-                .build();
-
-        // Get a handler that can be used to post to the main thread
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                System.out.println("Не удалось отправить запрос");
-                System.out.println(e);
-            }
-
-            @Override
-            public void onResponse(final Response response) throws IOException {
-                try {
-                    String responseData = response.body().string();
-                    JSONObject json = new JSONObject(responseData);
-                    System.out.println(responseData);
-                    final String owner = json.getString("name");
-                } catch (JSONException e) {
-
-                }
-            }
-        });
-
-    }
 
 }

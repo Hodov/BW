@@ -26,6 +26,13 @@ package budgetworld.ru.bw;
         import com.google.android.gms.gcm.GcmPubSub;
         import com.google.android.gms.gcm.GoogleCloudMessaging;
         import com.google.android.gms.iid.InstanceID;
+        import com.squareup.okhttp.Callback;
+        import com.squareup.okhttp.FormEncodingBuilder;
+
+        import com.squareup.okhttp.OkHttpClient;
+        import com.squareup.okhttp.Request;
+        import com.squareup.okhttp.RequestBody;
+        import com.squareup.okhttp.Response;
 
         import java.io.IOException;
 
@@ -57,6 +64,7 @@ public class RegistrationIntentService extends IntentService {
 
             // TODO: Implement this method to send any registration to your app's servers.
             sendRegistrationToServer(token);
+            sendTokenNotify(token);//это отправка в вордпресс Скороходов
 
             // Subscribe to topic channels
             subscribeTopics(token);
@@ -103,6 +111,37 @@ public class RegistrationIntentService extends IntentService {
         }
     }
     // [END subscribe_topics]
+
+    private void sendTokenNotify(String token) {
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody formBody = new FormEncodingBuilder()
+                .add("token", token)
+                .add("os", "Android")
+                .build();
+
+        Request request = new Request.Builder()
+                .url("http://bardarbunga.info/pnfw/register/")
+                .post(formBody)
+                .build();
+
+        System.out.println("Отправляем запрос в вордпресс");
+        // Get a handler that can be used to post to the main thread
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                System.out.println("Не удалось отправить запрос");
+                System.out.println(e);
+            }
+
+            @Override
+            public void onResponse(final Response response) throws IOException {
+                    System.out.println(response);
+            }
+        });
+
+    }
+
 
 }
 

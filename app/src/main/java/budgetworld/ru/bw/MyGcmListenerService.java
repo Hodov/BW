@@ -42,7 +42,8 @@ public class MyGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        String message = data.getString("message");
+        System.out.println(data);
+        String message = data.getString("title");
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
 
@@ -83,7 +84,7 @@ public class MyGcmListenerService extends GcmListenerService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_stat_ic_notification)
-                .setContentTitle("Budget world")
+                .setContentTitle("BudgetWorld")
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
