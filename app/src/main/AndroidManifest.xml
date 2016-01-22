@@ -10,10 +10,6 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- [END gcm_permission] -->
 
-    <permission android:name="budgetworld.ru.bw.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-    <uses-permission android:name="budgetworld.ru.bw.permission.C2D_MESSAGE" />
-
 
     <application
         android:allowBackup="true"
@@ -44,15 +40,19 @@
             android:label="@string/header">
         </activity>
 
+        <!-- [START gcm_receiver] -->
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="com.example.gcm" />
+                <category android:name="gcm.play.android.samples.com.gcmquickstart" />
             </intent-filter>
         </receiver>
+        <!-- [END gcm_receiver] -->
+
+        <!-- [START gcm_listener] -->
         <service
             android:name="budgetworld.ru.bw.MyGcmListenerService"
             android:exported="false" >
@@ -60,12 +60,19 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
+        <!-- [END gcm_listener] -->
+        <!-- [START instanceId_listener] -->
         <service
             android:name="budgetworld.ru.bw.MyInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID" />
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
             </intent-filter>
+        </service>
+        <!-- [END instanceId_listener] -->
+        <service
+            android:name="budgetworld.ru.bw.RegistrationIntentService"
+            android:exported="false">
         </service>
 
     </application>

@@ -28,6 +28,18 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.HttpUrl;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,19 +63,12 @@ public class MainActivity extends AppCompatActivity {
         Sender ID help
         491752260292
         */
-        shareText = getResources().getString(R.string.share_Text);
-        // [START shared_tracker]
-        // Obtain the shared Tracker instance.
-        AnalyticsApplication application = (AnalyticsApplication) getApplication();
-        mTracker = application.getDefaultTracker();
-        sendScreenName();
-        // [END shared_tracker]
 
-        //TOOLBAR ==================================================================
-        Toolbar main_toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(main_toolbar);
-        getSupportActionBar().setTitle(null);
-        //TOOLBAR ==================================================================
+        startNotifications();
+
+        shareText = getResources().getString(R.string.share_Text);
+        startGoogleAnalytics();
+        startToolbar();
 
         // получаем первую порцию данных и заполняем адаптер
         final UseRestClient bwRest = new UseRestClient(this);
@@ -112,32 +117,43 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                SharedPreferences sharedPreferences =
-                        PreferenceManager.getDefaultSharedPreferences(context);
-                boolean sentToken = sharedPreferences
-                        .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
-                if (!sentToken) {System.out.println("Токен не отправлен");}
-                if (sentToken) {
-                   System.out.println(getString(R.string.gcm_send_message));
-                    Toast toast = Toast.makeText(getApplication(), getString(R.string.gcm_send_message), Toast.LENGTH_LONG);
-                    toast.show();
-                } else {
-                    System.out.println(getString(R.string.token_error_message));
-                }
-            }
-        };
-
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
 
+    }
+
+    private void startGoogleAnalytics() {
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        sendScreenName();
+    }
+
+    private void startToolbar() {
+        Toolbar main_toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(main_toolbar);
+        getSupportActionBar().setTitle(null);
+    }
+
+    private void startNotifications() {
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+                boolean sentToken = sharedPreferences
+                        .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
+                if (sentToken) {
+                    System.out.println(getString(R.string.gcm_send_message));
+
+                    sendTokenNotify();
+                } else {
+                    System.out.println(getString(R.string.token_error_message));
+                }
+            }
+        };
     }
 
     @Override
@@ -147,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
     public void onSearchAction(MenuItem mi) {
         // handle click here
         Intent intent = new Intent(MainActivity.this, AviasalesActivity.class);
@@ -155,10 +170,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onShareAction(MenuItem mi) {
-
         //GOOGLE ANALYTICS
         sendGoogleAction("Action", "Share");
-
         // handle click here
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -177,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         sendScreenName();
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
@@ -214,6 +226,51 @@ public class MainActivity extends AppCompatActivity {
         String name = "MainActivity_BW";
         mTracker.setScreenName(name);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+
+
+    private void sendTokenNotify() {
+        OkHttpClient client = new OkHttpClient();
+
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://bardarbunga.info/pnfw/register/").newBuilder();
+        //urlBuilder.addQueryParameter("token", "eIMBweVd6KA:APA91bFIJA2ciw6LHZoRpQYIjNOOq5i8IHmd34miAkHWIVLqWnB1ru4_-ujLqmXcMqK20HGkW8CX3oKRuf2j2Hibyzo3A-yut4a1HCtjezIX5U1NQ6o-fFz-eqEBOWIyt9AcsPBf8iPp");
+        //urlBuilder.addQueryParameter("os", "Android");
+        //urlBuilder.addQueryParameter("email", "ihodov@gmail.com");
+        String url = urlBuilder.build().toString();
+        System.out.println(url);
+
+        RequestBody formBody = new FormEncodingBuilder()
+                .add("token", "eIMBweVd6KA:APA91bFIJA2ciw6LHZoRpQYIjNOOq5i8IHmd34miAkHWIVLqWnB1ru4_-ujLqmXcMqK20HGkW8CX3oKRuf2j2Hibyzo3A-yut4a1HCtjezIX5U1NQ6o-fFz-eqEBOWIyt9AcsPBf8iPp")
+                .add("os", "Android")
+                .add("email", "ahodov@yandex.ru")
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+        // Get a handler that can be used to post to the main thread
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                System.out.println("Не удалось отправить запрос");
+                System.out.println(e);
+            }
+
+            @Override
+            public void onResponse(final Response response) throws IOException {
+                try {
+                    String responseData = response.body().string();
+                    JSONObject json = new JSONObject(responseData);
+                    System.out.println(responseData);
+                    final String owner = json.getString("name");
+                } catch (JSONException e) {
+
+                }
+            }
+        });
+
     }
 
 }
