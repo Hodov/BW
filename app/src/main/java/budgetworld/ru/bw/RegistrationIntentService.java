@@ -26,15 +26,17 @@ package budgetworld.ru.bw;
         import com.google.android.gms.gcm.GcmPubSub;
         import com.google.android.gms.gcm.GoogleCloudMessaging;
         import com.google.android.gms.iid.InstanceID;
-        import com.squareup.okhttp.Callback;
-        import com.squareup.okhttp.FormEncodingBuilder;
 
-        import com.squareup.okhttp.OkHttpClient;
-        import com.squareup.okhttp.Request;
-        import com.squareup.okhttp.RequestBody;
-        import com.squareup.okhttp.Response;
 
         import java.io.IOException;
+
+        import okhttp3.Call;
+        import okhttp3.Callback;
+        import okhttp3.FormBody;
+        import okhttp3.OkHttpClient;
+        import okhttp3.Request;
+        import okhttp3.RequestBody;
+        import okhttp3.Response;
 
 public class RegistrationIntentService extends IntentService {
 
@@ -115,7 +117,7 @@ public class RegistrationIntentService extends IntentService {
     private void sendTokenNotify(String token) {
         OkHttpClient client = new OkHttpClient();
 
-        RequestBody formBody = new FormEncodingBuilder()
+        RequestBody formBody = new FormBody.Builder()
                 .add("token", token)
                 .add("os", "Android")
                 .build();
@@ -129,13 +131,13 @@ public class RegistrationIntentService extends IntentService {
         // Get a handler that can be used to post to the main thread
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Request request, IOException e) {
+            public void onFailure(Call call, IOException e) {
                 System.out.println("Не удалось отправить запрос");
                 System.out.println(e);
             }
 
             @Override
-            public void onResponse(final Response response) throws IOException {
+            public void onResponse(Call call, Response response) throws IOException {
                     System.out.println(response);
             }
         });

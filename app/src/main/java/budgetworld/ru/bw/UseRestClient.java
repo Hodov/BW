@@ -1,33 +1,32 @@
 package budgetworld.ru.bw;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
+
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.HttpUrl;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
+
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Headers;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class UseRestClient {
 
-   // private String urlBasic = "http://bardarbunga.info/wp-json/wp/v2/posts";
+    // private String urlBasic = "http://bardarbunga.info/wp-json/wp/v2/posts";
     private String urlBasic = "http://budgetworld.ru/wp-json/wp/v2/posts";
     private String noImageURL = "http://bloggfiler.no/anniegetyourgun.blogg.no/images/1104500-9-1382626375921-n500.jpg";
     Activity activity;
@@ -39,7 +38,9 @@ public class UseRestClient {
         activity = _activity;
     }
 
-    public void getRestClient(Integer page, final String action) {
+    public void getRestClient(Integer page, final String action) throws Exception{
+
+        OkHttpClient client = new OkHttpClient();
 
         //=========================================
         //Готовим УРЛ
@@ -47,7 +48,7 @@ public class UseRestClient {
         urlBuilder.addQueryParameter("page", page.toString());
         String url = urlBuilder.build().toString();
         //=========================================
-        OkHttpClient client = new OkHttpClient();
+
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -55,7 +56,7 @@ public class UseRestClient {
         client.newCall(request).enqueue(new Callback() {
 
             @Override
-            public void onFailure(Request request, IOException e) {
+            public void onFailure(Call call, IOException e) {
                 System.out.println("ОШИБКА");
                 System.out.println(e);
                 mSwipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.activity_main_swipe_refresh_layout);
@@ -78,7 +79,7 @@ public class UseRestClient {
             }
 
             @Override
-            public void onResponse(final Response response) throws IOException {
+            public void onResponse(Call call, Response response) throws IOException {
                 try {
                     String responseData = response.body().string();
                     JSONArray jsonArr = new JSONArray(responseData);
@@ -112,6 +113,7 @@ public class UseRestClient {
 
                 }
             }
+
 
             public void mapPosts(JSONArray resultsJS) throws JSONException {
                 //мапим данные из Json
@@ -173,9 +175,11 @@ public class UseRestClient {
         });
     }
 
+
+
     public void drawPosts(Activity _activity) {
         // Create the adapter to convert the array to views
-       // PostsAdapter adapter = new PostsAdapter(_activity, posts);
+        // PostsAdapter adapter = new PostsAdapter(_activity, posts);
         //getRestClient(1, "load");
         adapter = new PostsAdapter(_activity, posts);
         // Attach the adapter to a ListView
@@ -185,3 +189,4 @@ public class UseRestClient {
 
 
 }
+

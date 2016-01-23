@@ -21,25 +21,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import android.support.v4.content.LocalBroadcastManager;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
-import android.widget.Toast;
-
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.squareup.okhttp.FormEncodingBuilder;
-import com.squareup.okhttp.HttpUrl;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -85,7 +71,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to your AdapterView
-                bwRest.getRestClient(page - 1, "load");
+                try {
+                    bwRest.getRestClient(page - 1, "load");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 sendGoogleAction("Scroll", "Page " + page);
                 // or customLoadMoreDataFromApi(totalItemsCount);
                 return true; // ONLY if more data is actually being loaded; false otherwise.
@@ -113,7 +103,11 @@ public class MainActivity extends AppCompatActivity {
             public void onRefresh() {
                 sendGoogleAction("Action", "Refresh");
                 Integer page = 1;
-                bwRest.getRestClient(page, "refresh");
+                try {
+                    bwRest.getRestClient(page, "refresh");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
