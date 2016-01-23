@@ -30,5 +30,7 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.google.android.gms:play-services-analytics:8.3.0'
     compile "com.google.android.gms:play-services:8.3.0"
+    compile 'se.akerfeldt:okhttp-signpost:1.1.0'
+    compile 'oauth.signpost:signpost-core:1.2.1.2'
 
 }

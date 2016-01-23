@@ -21,6 +21,7 @@ package budgetworld.ru.bw;
         import android.content.SharedPreferences;
         import android.preference.PreferenceManager;
         import android.support.v4.content.LocalBroadcastManager;
+        import android.util.Base64;
         import android.util.Log;
 
         import com.google.android.gms.gcm.GcmPubSub;
@@ -29,7 +30,11 @@ package budgetworld.ru.bw;
 
 
         import java.io.IOException;
+        import java.util.Date;
 
+        import oauth.signpost.exception.OAuthCommunicationException;
+        import oauth.signpost.exception.OAuthExpectationFailedException;
+        import oauth.signpost.exception.OAuthMessageSignerException;
         import okhttp3.Call;
         import okhttp3.Callback;
         import okhttp3.FormBody;
@@ -37,6 +42,9 @@ package budgetworld.ru.bw;
         import okhttp3.Request;
         import okhttp3.RequestBody;
         import okhttp3.Response;
+        import okio.Buffer;
+        import se.akerfeldt.okhttp.signpost.OkHttpOAuthConsumer;
+        import se.akerfeldt.okhttp.signpost.SigningInterceptor;
 
 public class RegistrationIntentService extends IntentService {
 
@@ -115,11 +123,29 @@ public class RegistrationIntentService extends IntentService {
     // [END subscribe_topics]
 
     private void sendTokenNotify(String token) {
-        OkHttpClient client = new OkHttpClient();
+       // OkHttpClient client = new OkHttpClient();
+        String token1 = "";
+        String secret1 = "";
+
+        OkHttpOAuthConsumer consumer = new OkHttpOAuthConsumer("ck_3373d66cd71fbac5241b0f9598bf65cc", "cs_47d376a78f18bfa906f76129b41c9b20");
+        //consumer.setTokenWithSecret(token1, secret1);
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                //.addInterceptor(new SigningInterceptor(consumer))
+                .build();
+
+        new Date().getTime();
 
         RequestBody formBody = new FormBody.Builder()
-                .add("token", token)
+                .add("token", "123")
                 .add("os", "Android")
+                .add("oauth_consumer_key", "ck_3373d66cd71fbac5241b0f9598bf65cc")
+                .add("oauth_token", "")
+                .add("oauth_signature_method", "HMAC-SHA1")
+                .add("oauth_timestamp", Long.toString(new Date().getTime()))
+                .add("oauth_nonce", "nThTwC")
+                .add("oauth_version", "1.0")
+                .add("oauth_signature", "gFl3YRqwzFW1W58G689V7bZuAFw=")
                 .build();
 
         Request request = new Request.Builder()
@@ -127,8 +153,9 @@ public class RegistrationIntentService extends IntentService {
                 .post(formBody)
                 .build();
 
-        System.out.println("Отправляем запрос в вордпресс");
-        // Get a handler that can be used to post to the main thread
+        System.out.println(bodyToString(request));
+
+
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -138,10 +165,22 @@ public class RegistrationIntentService extends IntentService {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                    System.out.println(response);
+                System.out.println(response.body().string());
             }
         });
 
+    }
+
+    private static String bodyToString(final Request request){
+
+        try {
+            final Request copy = request.newBuilder().build();
+            final Buffer buffer = new Buffer();
+            copy.body().writeTo(buffer);
+            return buffer.readUtf8();
+        } catch (final IOException e) {
+            return "did not work";
+        }
     }
 
 
