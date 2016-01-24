@@ -23,18 +23,33 @@ package budgetworld.ru.bw;
         import android.support.v4.content.LocalBroadcastManager;
         import android.util.Base64;
         import android.util.Log;
+        import android.widget.Toast;
 
         import com.google.android.gms.gcm.GcmPubSub;
         import com.google.android.gms.gcm.GoogleCloudMessaging;
         import com.google.android.gms.iid.InstanceID;
 
 
+        import java.io.BufferedInputStream;
         import java.io.IOException;
+        import java.io.InputStream;
+        import java.net.HttpURLConnection;
+        import java.net.MalformedURLException;
+        import java.net.URL;
         import java.util.Date;
 
-        import oauth.signpost.exception.OAuthCommunicationException;
-        import oauth.signpost.exception.OAuthExpectationFailedException;
-        import oauth.signpost.exception.OAuthMessageSignerException;
+        import java.io.IOException;
+        import java.io.PrintWriter;
+        import java.net.HttpURLConnection;
+        import java.net.MalformedURLException;
+        import java.net.ProtocolException;
+        import java.net.URL;
+        import java.net.URLEncoder;
+        import java.util.Scanner;
+
+
+        import oauth.signpost.OAuthConsumer;
+        import oauth.signpost.basic.DefaultOAuthConsumer;
         import okhttp3.Call;
         import okhttp3.Callback;
         import okhttp3.FormBody;
@@ -75,6 +90,7 @@ public class RegistrationIntentService extends IntentService {
             // TODO: Implement this method to send any registration to your app's servers.
             sendRegistrationToServer(token);
             sendTokenNotify(token);//это отправка в вордпресс Скороходов
+
 
             // Subscribe to topic channels
             subscribeTopics(token);
@@ -123,38 +139,35 @@ public class RegistrationIntentService extends IntentService {
     // [END subscribe_topics]
 
     private void sendTokenNotify(String token) {
-       // OkHttpClient client = new OkHttpClient();
-        String token1 = "";
-        String secret1 = "";
+        //String url = "http://bardarbunga.info/pnfw/register/";
+        String url = "http://budgetworld.ru/pnfw/register/";
 
-        OkHttpOAuthConsumer consumer = new OkHttpOAuthConsumer("ck_3373d66cd71fbac5241b0f9598bf65cc", "cs_47d376a78f18bfa906f76129b41c9b20");
-        //consumer.setTokenWithSecret(token1, secret1);
+        //OkHttpOAuthConsumer consumer = new OkHttpOAuthConsumer("ck_3373d66cd71fbac5241b0f9598bf65cc", "cs_47d376a78f18bfa906f76129b41c9b20");
 
         OkHttpClient client = new OkHttpClient.Builder()
                 //.addInterceptor(new SigningInterceptor(consumer))
                 .build();
 
-        new Date().getTime();
+        //new Date().getTime();
 
         RequestBody formBody = new FormBody.Builder()
-                .add("token", "123")
+                .add("token", token)
                 .add("os", "Android")
-                .add("oauth_consumer_key", "ck_3373d66cd71fbac5241b0f9598bf65cc")
-                .add("oauth_token", "")
-                .add("oauth_signature_method", "HMAC-SHA1")
-                .add("oauth_timestamp", Long.toString(new Date().getTime()))
-                .add("oauth_nonce", "nThTwC")
-                .add("oauth_version", "1.0")
-                .add("oauth_signature", "gFl3YRqwzFW1W58G689V7bZuAFw=")
+                //.add("oauth_consumer_key", "ck_3373d66cd71fbac5241b0f9598bf65cc")
+               // .add("oauth_token", "")
+             //   .add("oauth_signature_method", "HMAC-SHA1")
+              //  .add("oauth_timestamp", "1453619654"/*Long.toString(new Date().getTime())*/)
+              //  .add("oauth_nonce", "BrWiS2")
+             //   .add("oauth_version", "1.0")
+                //.add("oauth_signature", "BgcP5EQGAphGPTXHn1sJxuZYb9I=")
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://bardarbunga.info/pnfw/register/")
+                .url(url)
                 .post(formBody)
                 .build();
 
         System.out.println(bodyToString(request));
-
 
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -165,6 +178,7 @@ public class RegistrationIntentService extends IntentService {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                System.out.println(response);
                 System.out.println(response.body().string());
             }
         });
@@ -182,7 +196,6 @@ public class RegistrationIntentService extends IntentService {
             return "did not work";
         }
     }
-
 
 }
 
