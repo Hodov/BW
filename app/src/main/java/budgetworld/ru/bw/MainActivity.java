@@ -23,6 +23,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.content.SharedPreferences;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
+import android.widget.Toast;
+
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "MainActivity";
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private UseRestClient bwRest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         startToolbar();
 
         // получаем первую порцию данных и заполняем адаптер
-        final UseRestClient bwRest = new UseRestClient(this);
+        bwRest = new UseRestClient(this);
         bwRest.drawPosts(this);
 
         //находим лист вью
@@ -184,8 +187,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         sendScreenName();
+        try {
+            bwRest.getRestClient(1, "refresh");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
+
     }
 
     @Override
