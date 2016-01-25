@@ -23,7 +23,7 @@ public class PostActivity extends AppCompatActivity {
      * The {@link Tracker} used to record screen views.
      */
     private Tracker mTracker;
-
+    private String afterUrl = "?utm_source=app&utm_medium=android&utm_campaign=main";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class PostActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         TextView textView = (TextView) findViewById(R.id.textView);
         textView.setText(Html.fromHtml(extras.getString("title")));
-        webView.loadUrl(extras.getString("link"));
+        webView.loadUrl(extras.getString("link")+afterUrl);
 
     }
 
