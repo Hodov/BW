@@ -187,11 +187,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         sendScreenName();
-        try {
-            bwRest.getRestClient(1, "refresh");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
 

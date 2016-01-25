@@ -43,7 +43,7 @@ public class MyGcmListenerService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("title");
-        System.out.println("title");
+        System.out.println(data.getString("title"));
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
 
@@ -65,9 +65,7 @@ public class MyGcmListenerService extends GcmListenerService {
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
-        System.out.println("Запускаем процедуру отправки нотификации");
         sendNotification(message);
-        System.out.println("После процедуры отправки нотификации");
         // [END_EXCLUDE]
     }
     // [END receive_message]
