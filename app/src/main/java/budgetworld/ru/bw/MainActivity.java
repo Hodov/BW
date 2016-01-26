@@ -46,20 +46,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Поехали
-        /*
-        Server API Key help
-        AIzaSyAlICMX1bjMbh42r58EMTwy8tckX38TgiA
-        Sender ID help
-        491752260292
-        */
+        // Server API Key help AIzaSyAlICMX1bjMbh42r58EMTwy8tckX38TgiA
+
         shareText = getResources().getString(R.string.share_Text);
         startGoogleAnalytics();
         startNotifications();
-        if (checkPlayServices()) {
-            // Start IntentService to register this application with GCM.
-            Intent intent = new Intent(this, RegistrationIntentService.class);
-            startService(intent);
-        }
         startToolbar();
 
         // если юзер пришел из нотификаций, пишем аналитику
@@ -146,12 +137,17 @@ public class MainActivity extends AppCompatActivity {
                         .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
                 if (sentToken) {
                     System.out.println(getString(R.string.gcm_send_message));
-                    //sendTokenNotify();
                 } else {
                     System.out.println(getString(R.string.token_error_message));
                 }
             }
         };
+
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
     }
 
     @Override
