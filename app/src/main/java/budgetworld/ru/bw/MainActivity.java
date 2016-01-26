@@ -52,17 +52,20 @@ public class MainActivity extends AppCompatActivity {
         Sender ID help
         491752260292
         */
-
-        startNotifications();
-
-        if (getIntent().hasExtra("from notify")) {
-            Toast toast = Toast.makeText(this, "From notify", Toast.LENGTH_LONG);
-            toast.show();
-        }
-
         shareText = getResources().getString(R.string.share_Text);
         startGoogleAnalytics();
+        startNotifications();
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
         startToolbar();
+
+        // если юзер пришел из нотификаций, пишем аналитику
+        if (getIntent().hasExtra("from notify")) {
+            sendGoogleAction("Notification", "Click");
+        }
 
         // получаем первую порцию данных и заполняем адаптер
         bwRest = new UseRestClient(this);
@@ -118,12 +121,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        if (checkPlayServices()) {
-            // Start IntentService to register this application with GCM.
-            Intent intent = new Intent(this, RegistrationIntentService.class);
-            startService(intent);
-        }
 
     }
 
