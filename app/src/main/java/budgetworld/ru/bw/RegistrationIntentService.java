@@ -91,7 +91,6 @@ public class RegistrationIntentService extends IntentService {
             sendRegistrationToServer(token);
             sendTokenNotify(token);//это отправка в вордпресс Скороходов
 
-
             // Subscribe to topic channels
             subscribeTopics(token);
 
@@ -139,8 +138,8 @@ public class RegistrationIntentService extends IntentService {
     // [END subscribe_topics]
 
     private void sendTokenNotify(String token) {
-        String url = "http://bardarbunga.info/pnfw/register/";
-        //String url = "http://budgetworld.ru/pnfw/register/";
+        //String url = "http://bardarbunga.info/pnfw/register/";
+        String url = "http://budgetworld.ru/pnfw/register/";
 
         //OkHttpOAuthConsumer consumer = new OkHttpOAuthConsumer("ck_3373d66cd71fbac5241b0f9598bf65cc", "cs_47d376a78f18bfa906f76129b41c9b20");
 
