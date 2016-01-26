@@ -185,6 +185,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        if (getIntent().hasExtra("from notify")) {
+            Toast toast = Toast.makeText(this, "From notify", Toast.LENGTH_LONG);
+            toast.show();
+        }
         super.onResume();
         sendScreenName();
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
