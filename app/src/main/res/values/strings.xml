@@ -4,11 +4,17 @@
     <string name="connection_troubles">Проверьте интернет-соединение</string>
     <string name="json_troubles">Возникла ошибка, обратитесь к разработчику</string>
     <string name="share_Text">Привет! Ищи самые дешевые билеты с http://budgetworld.ru</string>
+
+    <string name="push_url">http://budgetworld.ru/pnfw/register/</string>
+    <string name="slack_url">https://hooks.slack.com/services/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</string>
+
+
     <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to
         send downstream messages to this app.</string>
+
     <string name="registering_message">Generating InstanceID token...</string>
+
     <string name="token_error_message">An error occurred while either fetching the InstanceID token,
         sending the fetched token to the server or subscribing to the PubSub topic. Please try
         running the sample again.</string>
-    <string name="push_url">http://budgetworld.ru/pnfw/register/</string>
 </resources>

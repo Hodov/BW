@@ -89,6 +89,7 @@ public class RegistrationIntentService extends IntentService {
 
             // TODO: Implement this method to send any registration to your app's servers.
             sendRegistrationToServer(token);
+            SendSlackMessage slack = new SendSlackMessage(token);
             sendTokenNotify(token);//это отправка в вордпресс Скороходов
 
             // Subscribe to topic channels
