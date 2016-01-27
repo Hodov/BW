@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         // если юзер пришел из нотификаций, пишем аналитику
         if (getIntent().hasExtra("from notify")) {
-            sendGoogleAction("Notification", "Click");
+            sendGoogleAction("Notification", getIntent().getExtras().getString("from notify"));
         }
 
         // получаем первую порцию данных и заполняем адаптер
