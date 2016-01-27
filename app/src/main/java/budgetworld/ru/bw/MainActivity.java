@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
     private void startGoogleAnalytics() {
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
         mTracker = application.getDefaultTracker();
+        mTracker.enableAdvertisingIdCollection(true);
         sendScreenName();
     }
 
