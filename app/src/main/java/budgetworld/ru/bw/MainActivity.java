@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Поехали
-        // Server API Key help AIzaSyAlICMX1bjMbh42r58EMTwy8tckX38TgiA
 
         shareText = getResources().getString(R.string.share_Text);
         startGoogleAnalytics();

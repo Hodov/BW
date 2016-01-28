@@ -59,14 +59,14 @@ public class UseRestClient {
             public void onFailure(Call call, IOException e) {
                 System.out.println("ОШИБКА");
                 System.out.println(e);
-                mSwipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.activity_main_swipe_refresh_layout);
-                if (mSwipeRefreshLayout.isRefreshing()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
 
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        mSwipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.activity_main_swipe_refresh_layout);
+                        if (mSwipeRefreshLayout.isRefreshing()) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
                         //Toast toast = Toast.makeText(activity, R.string.connection_troubles, Toast.LENGTH_LONG);
                         //toast.show();
                         LinearLayout mRootLayout = (LinearLayout) activity.findViewById(R.id.rootLayout);
