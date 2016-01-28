@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         startGoogleAnalytics();
         startNotifications();
         startToolbar();
-        SendSlackMessage slack = new SendSlackMessage(getUsername());
+        SendSlackMessage slack = new SendSlackMessage("Вошел: "+getUsername());
 
         // если юзер пришел из нотификаций, пишем аналитику
         if (getIntent().hasExtra("from notify")) {
