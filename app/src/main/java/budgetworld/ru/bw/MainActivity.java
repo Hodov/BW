@@ -1,6 +1,8 @@
 package budgetworld.ru.bw;
 
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,6 +30,9 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import java.util.LinkedList;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         startGoogleAnalytics();
         startNotifications();
         startToolbar();
+        SendSlackMessage slack = new SendSlackMessage(getUsername());
 
         // если юзер пришел из нотификаций, пишем аналитику
         if (getIntent().hasExtra("from notify")) {
@@ -223,5 +229,25 @@ public class MainActivity extends AppCompatActivity {
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
+    public String getUsername() {
+        AccountManager manager = AccountManager.get(this);
+        Account[] accounts = manager.getAccountsByType("com.google");
+        List<String> possibleEmails = new LinkedList<String>();
+
+        for (Account account : accounts) {
+            // TODO: Check possibleEmail against an email regex or treat
+            // account.name as an email address only for certain account.type values.
+            possibleEmails.add(account.name);
+        }
+
+        if (!possibleEmails.isEmpty() && possibleEmails.get(0) != null) {
+            String email = possibleEmails.get(0);
+            String[] parts = email.split("@");
+
+            if (parts.length > 1)
+                return parts[0];
+        }
+        return null;
+    }
 
 }
