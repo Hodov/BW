@@ -14,4 +14,6 @@
     <color name="main_background">#FFE9E9E9</color>
     <color name="main_item_background">#FFFFFF</color>
     <color name="devider">#FFFFFF</color>
+
+    <color name="led">#00BCD4</color>
 </resources>

@@ -94,7 +94,9 @@ public class MyGcmListenerService extends GcmListenerService {
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(message));
+                        .bigText(message))
+                .setLights(getResources().getColor(R.color.led), 2000, 2000);
+
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
