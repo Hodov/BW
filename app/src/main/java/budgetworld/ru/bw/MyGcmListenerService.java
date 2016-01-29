@@ -92,7 +92,9 @@ public class MyGcmListenerService extends GcmListenerService {
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
+                .setContentIntent(pendingIntent)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(message));
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
