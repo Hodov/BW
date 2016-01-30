@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:id="@+id/drawer">
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -37,38 +38,43 @@
                 android:textColor="@color/headerFont"/>
         </android.support.v7.widget.Toolbar>
 
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/activity_main_swipe_refresh_layout"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <ListView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/lvItems"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/textView2"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="20sp"/>
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/activity_main_swipe_refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+                <ListView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lvItems"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/textView2"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="20sp"/>
+
+            </android.support.v4.widget.SwipeRefreshLayout>
 
 
-    </RelativeLayout>
+        </RelativeLayout>
 
+    </FrameLayout>
 </LinearLayout>
 
     <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/header"
         app:menu="@menu/drawer"/>
-
-
 
 </android.support.v4.widget.DrawerLayout>

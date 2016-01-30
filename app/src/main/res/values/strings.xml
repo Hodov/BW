@@ -9,6 +9,8 @@
     <string name="slack_url">https://hooks.slack.com/services/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</string>
 
     <string name="menu_settings">Настройки</string>
+    <string name="openDrawer">Open</string>
+    <string name="closeDrawer">Close</string>
 
     <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to
         send downstream messages to this app.</string>

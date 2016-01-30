@@ -7,7 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -45,21 +49,30 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private UseRestClient bwRest;
+    private NavigationView navigationView;
+    private DrawerLayout drawerLayout;
+    private Toolbar main_toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Поехали
-
+        // Initializing share text
         shareText = getResources().getString(R.string.share_Text);
+        // Initializing Google Analytics
         startGoogleAnalytics();
+        // Initializing Notifications
         startNotifications();
+        // Initializing Toolbar and setting it as the actionbar
         startToolbar();
+        navigationMenu();
+
+        //Initializing User info
         User user = new User(this);
+        //Send message in Slack about user
         //SendSlackMessage slack = new SendSlackMessage("Событие: вход пользователя. Имя: " + user.userName + " Email: " + user.userEmail + " Моб.: " + user.userPhone);
         System.out.println("Name: " + user.userName + " Email: " + user.userEmail + " Phone: " + user.userPhone);
-
 
         // если юзер пришел из нотификаций, пишем аналитику
         if (getIntent().hasExtra("from notify")) {
@@ -131,9 +144,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startToolbar() {
-        Toolbar main_toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        main_toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(main_toolbar);
         getSupportActionBar().setTitle(null);
+
     }
 
     private void startNotifications() {
@@ -151,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
@@ -232,6 +245,59 @@ public class MainActivity extends AppCompatActivity {
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
+    private void navigationMenu() {
+        //Initializing NavigationView
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,main_toolbar,R.string.openDrawer, R.string.closeDrawer){
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
+                super.onDrawerClosed(drawerView);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
+
+                super.onDrawerOpened(drawerView);
+            }
+        };
+
+        //Setting the actionbarToggle to drawer layout
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+
+        //calling sync state is necessay or else your hamburger icon wont show up
+        actionBarDrawerToggle.syncState();
+
+        //setting up selected item listener
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        menuItem.setChecked(true);
+                        drawerLayout.closeDrawers();
+
+                        switch (menuItem.getItemId()){
+                            //Replacing the main content with ContentFragment Which is our Inbox View;
+                            case R.id.settings:
+                                Toast.makeText(getApplicationContext(),"Inbox Selected",Toast.LENGTH_SHORT).show();
+                               SettingsFragment fragment = new SettingsFragment();
+                                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.replace(R.id.frame,fragment);
+                                fragmentTransaction.commit();
+                                return true;
+
+                            default:
+                                Toast.makeText(getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
+                                return true;
+
+                        }
+                    }
+                });
+
+    }
 
 
 }
