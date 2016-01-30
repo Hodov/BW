@@ -139,8 +139,14 @@ public class RegistrationIntentService extends IntentService {
     // [END subscribe_topics]
 
     private void sendTokenNotify(String token) {
-        String url = "http://bardarbunga.info/pnfw/register/";
-        //String url = getResources().getString(R.string.push_url);
+        String url;
+        AppConfig appConfig  = new AppConfig();
+        if (appConfig.releaseBuild) {
+            url = getResources().getString(R.string.push_url);
+        }
+        else {
+            url = "http://bardarbunga.info/pnfw/register/";
+        }
 
         //OkHttpOAuthConsumer consumer = new OkHttpOAuthConsumer("ck_3373d66cd71fbac5241b0f9598bf65cc", "cs_47d376a78f18bfa906f76129b41c9b20");
 
@@ -153,13 +159,13 @@ public class RegistrationIntentService extends IntentService {
         RequestBody formBody = new FormBody.Builder()
                 .add("token", token)
                 .add("os", "Android")
-                //.add("oauth_consumer_key", "ck_3373d66cd71fbac5241b0f9598bf65cc")
-               // .add("oauth_token", "")
-             //   .add("oauth_signature_method", "HMAC-SHA1")
-              //  .add("oauth_timestamp", "1453619654"/*Long.toString(new Date().getTime())*/)
-              //  .add("oauth_nonce", "BrWiS2")
-             //   .add("oauth_version", "1.0")
-                //.add("oauth_signature", "BgcP5EQGAphGPTXHn1sJxuZYb9I=")
+                        //.add("oauth_consumer_key", "ck_3373d66cd71fbac5241b0f9598bf65cc")
+                        // .add("oauth_token", "")
+                        //   .add("oauth_signature_method", "HMAC-SHA1")
+                        //  .add("oauth_timestamp", "1453619654"/*Long.toString(new Date().getTime())*/)
+                        //  .add("oauth_nonce", "BrWiS2")
+                        //   .add("oauth_version", "1.0")
+                        //.add("oauth_signature", "BgcP5EQGAphGPTXHn1sJxuZYb9I=")
                 .build();
 
         Request request = new Request.Builder()

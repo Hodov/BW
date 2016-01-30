@@ -52,30 +52,37 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private Toolbar main_toolbar;
+    final AppConfig appConfig = new AppConfig();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Поехали
+
         // Initializing share text
         shareText = getResources().getString(R.string.share_Text);
-        // Initializing Google Analytics
-        startGoogleAnalytics();
+
+        // Initializing Google Analytics if releaseBuild
+        if (appConfig.releaseBuild) {
+            startGoogleAnalytics();
+        }
+
         // Initializing Notifications
         startNotifications();
         // Initializing Toolbar and setting it as the actionbar
         startToolbar();
+        // Initializing Navigation Drawer
         navigationMenu();
 
         //Initializing User info
         User user = new User(this);
-        //Send message in Slack about user
-        //SendSlackMessage slack = new SendSlackMessage("Событие: вход пользователя. Имя: " + user.userName + " Email: " + user.userEmail + " Моб.: " + user.userPhone);
-        System.out.println("Name: " + user.userName + " Email: " + user.userEmail + " Phone: " + user.userPhone);
+        //Send message in Slack about user if releaseBuild
+        if (appConfig.releaseBuild) {
+            SendSlackMessage slack = new SendSlackMessage("Событие: вход пользователя. Имя: " + user.userName + " Email: " + user.userEmail + " Моб.: " + user.userPhone);
+        }
 
-        // если юзер пришел из нотификаций, пишем аналитику
-        if (getIntent().hasExtra("from notify")) {
+        // если юзер пришел из нотификаций, пишем аналитику (if releaseBuild)
+        if ((appConfig.releaseBuild)&&(getIntent().hasExtra("from notify"))) {
             sendGoogleAction("Notification", getIntent().getExtras().getString("from notify"));
         }
 
@@ -99,8 +106,9 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                sendGoogleAction("Scroll", "Page " + page);
-                // or customLoadMoreDataFromApi(totalItemsCount);
+                if (appConfig.releaseBuild) {
+                    sendGoogleAction("Scroll", "Page " + page);
+                }
                 return true; // ONLY if more data is actually being loaded; false otherwise.
             }
         });
@@ -115,7 +123,10 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("title", bwRest.posts.get(position).postTitle);
                 intent.putExtra("link", bwRest.posts.get(position).postLink);
                 startActivity(intent);
-                sendGoogleAction("Move",String.valueOf(Html.fromHtml(bwRest.posts.get(position).postTitle)));
+                if (appConfig.releaseBuild) {
+                    sendGoogleAction("Move",String.valueOf(Html.fromHtml(bwRest.posts.get(position).postTitle)));
+                }
+
             }
         });
         //==================
@@ -124,7 +135,9 @@ public class MainActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                sendGoogleAction("Action", "Refresh");
+                if (appConfig.releaseBuild) {
+                    sendGoogleAction("Action", "Refresh");
+                }
                 Integer page = 1;
                 try {
                     bwRest.getRestClient(page, "refresh");
@@ -187,7 +200,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void onShareAction(MenuItem mi) {
         //GOOGLE ANALYTICS
-        sendGoogleAction("Action", "Share");
+        if (appConfig.releaseBuild) {
+            sendGoogleAction("Action", "Share");
+        }
+
         // handle click here
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -206,7 +222,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        sendScreenName();
+        if (appConfig.releaseBuild) {
+            sendScreenName();
+        }
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
 

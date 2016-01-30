@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-
-
 public class SettingsFragment extends android.support.v4.app.Fragment {
     @Nullable
     @Override
