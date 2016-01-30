@@ -31,10 +31,17 @@ public class User {
         Account[] accountsViber = manager.getAccountsByType("com.viber.voip");
         Account[] accountsGoogle = manager.getAccountsByType("com.google");
 
-        userName = accountsVK[0].name;
-        userEmail = accountsGoogle[0].name;
-        userPhone = accountsViber[0].name;
-
+        if (accountsVK.length > 0) {
+            userName = accountsVK[0].name;
         }
+
+        if (accountsGoogle.length > 0) {
+            userEmail = accountsGoogle[0].name;
+        }
+
+        if (accountsViber.length > 0) {
+            userPhone = accountsViber[0].name;
+        }
+    }
 
 }
