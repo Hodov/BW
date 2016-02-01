@@ -332,8 +332,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean getPushSettings(String setting) {
-        System.out.println("Получили");
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        //SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean defaultValue = true;
         return sharedPref.getBoolean(setting, defaultValue);
     }

@@ -20,9 +20,11 @@ package budgetworld.ru.bw;
         import android.app.PendingIntent;
         import android.content.Context;
         import android.content.Intent;
+        import android.content.SharedPreferences;
         import android.media.RingtoneManager;
         import android.net.Uri;
         import android.os.Bundle;
+        import android.preference.PreferenceManager;
         import android.support.v4.app.NotificationCompat;
         import android.util.Log;
 
@@ -65,7 +67,10 @@ public class MyGcmListenerService extends GcmListenerService {
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
-        sendNotification(message);
+        if (getPushSettings(getString(R.string.switch_setting))) {
+            sendNotification(message);
+        }
+
         // [END_EXCLUDE]
     }
     // [END receive_message]
@@ -103,4 +108,11 @@ public class MyGcmListenerService extends GcmListenerService {
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
+
+    private boolean getPushSettings(String setting) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean defaultValue = true;
+        return sharedPref.getBoolean(setting, defaultValue);
+    }
+
 }

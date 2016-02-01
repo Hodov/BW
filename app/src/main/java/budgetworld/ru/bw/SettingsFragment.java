@@ -4,6 +4,7 @@ package budgetworld.ru.bw;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -51,15 +52,16 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
 
     private void addPushSettings(String setting, Boolean value) {
         System.out.println("Записали");
-        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        //SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean(setting, value);
         editor.commit();
     }
 
     private boolean getPushSettings(String setting) {
-        System.out.println("Получили");
-        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        //SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean defaultValue = true;
         return sharedPref.getBoolean(setting, defaultValue);
     }
