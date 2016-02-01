@@ -2,15 +2,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
+    <View
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="INBOX"
-        android:padding="8dp"
-        android:textColor="#FF1231"
-        android:textSize="28sp"
-        android:id="@+id/textView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:background="@color/main_background"
+        android:layout_alignParentEnd="false" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="normal"
+        android:typeface="normal"
+        android:textSize="20dp"
+        android:text="@string/switch_push"
+        android:textOff="@string/switch_push_off"
+        android:textOn="@string/switch_push_on"
+
+        android:switchMinWidth="40dp"
+        android:switchPadding="15dp"
+        android:id="@+id/switch1"
+        android:layout_below="@+id/include"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="50dp"
+        android:enabled="true"
+        android:focusableInTouchMode="false"
+        android:focusable="false"
+        android:checked="true" />
+
 
 </RelativeLayout>

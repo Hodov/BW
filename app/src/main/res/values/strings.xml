@@ -8,7 +8,18 @@
     <string name="push_url">http://budgetworld.ru/pnfw/register/</string>
     <string name="slack_url">https://hooks.slack.com/services/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</string>
 
+
+    <!-- Экран настроек -->
+    <string name="switch_push">Уведомления</string>
+    <string name="switch_push_on">Уведомления включены</string>>
+    <string name="switch_push_off">Уведомления отключены</string>>
+    <!--  -->
+
+    <!-- Меню -->
+    <string name="menu_main">Лента</string>
     <string name="menu_settings">Настройки</string>
+    <!--  -->
+
     <string name="openDrawer">Open</string>
     <string name="closeDrawer">Close</string>
 
