@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 
 
@@ -29,6 +30,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.content.SharedPreferences;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private Toolbar main_toolbar;
     final AppConfig appConfig = new AppConfig();
+    private Switch mSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
         startToolbar();
         // Initializing Navigation Drawer
         navigationMenu();
+        // Initializing switch1
+        switch_push();
 
         //Initializing User info
         User user = new User(this);
@@ -297,18 +302,18 @@ public class MainActivity extends AppCompatActivity {
                         menuItem.setChecked(true);
                         drawerLayout.closeDrawers();
 
-                        switch (menuItem.getItemId()){
+                        switch (menuItem.getItemId()) {
                             //Replacing the main content with ContentFragment Which is our Inbox View;
                             case R.id.settings:
-                                Toast.makeText(getApplicationContext(),"Inbox Selected",Toast.LENGTH_SHORT).show();
-                               SettingsFragment fragment = new SettingsFragment();
+                                Toast.makeText(getApplicationContext(), "Inbox Selected", Toast.LENGTH_SHORT).show();
+                                SettingsFragment fragment = new SettingsFragment();
                                 android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                fragmentTransaction.replace(R.id.frame,fragment);
+                                fragmentTransaction.replace(R.id.frame, fragment);
                                 fragmentTransaction.commit();
                                 return true;
 
                             default:
-                                Toast.makeText(getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
                                 return true;
 
                         }
@@ -317,5 +322,44 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    private boolean switch_push() {
+
+
+        mSwitch = (Switch) findViewById(R.id.switch1);
+        // устанавливаем переключатель программно в значение ON
+        mSwitch.setChecked(getPushSettings(getString(R.string.switch_setting)));
+        // добавляем слушателя
+        mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // в зависимости от значения isChecked выводим нужное сообщение
+                if (isChecked) {
+                    Toast.makeText(getApplicationContext(), "SET ON", Toast.LENGTH_SHORT).show();
+                    addPushSettings(getString(R.string.switch_setting), true);
+                } else {
+                    Toast.makeText(getApplicationContext(), "SET OFF", Toast.LENGTH_SHORT).show();
+                    addPushSettings(getString(R.string.switch_setting), false);
+                }
+            }
+        });
+        return true;
+    }
+
+    private void addPushSettings(String setting, Boolean value) {
+        System.out.println("Записали");
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(setting, value);
+        editor.commit();
+    }
+
+    private boolean getPushSettings(String setting) {
+        System.out.println("Получили");
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        boolean defaultValue = true;
+        return sharedPref.getBoolean(setting, defaultValue);
+    }
 
 }

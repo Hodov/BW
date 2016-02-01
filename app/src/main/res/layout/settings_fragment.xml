@@ -17,7 +17,6 @@
         android:text="@string/switch_push"
         android:textOff="@string/switch_push_off"
         android:textOn="@string/switch_push_on"
-
         android:switchMinWidth="40dp"
         android:switchPadding="15dp"
         android:id="@+id/switch1"

@@ -13,6 +13,7 @@
     <string name="switch_push">Уведомления</string>
     <string name="switch_push_on">Уведомления включены</string>>
     <string name="switch_push_off">Уведомления отключены</string>>
+    <string name="switch_setting">push</string>>
     <!--  -->
 
     <!-- Меню -->
