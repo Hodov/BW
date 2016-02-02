@@ -87,15 +87,20 @@ public class MainActivity extends AppCompatActivity {
 
         //Initializing User info
         User user = new User(this);
+
+
         //Send message in Slack about user if releaseBuild
         if (appConfig.releaseBuild) {
-            SendSlackMessage slack = new SendSlackMessage("Событие: вход пользователя. Имя: " + user.userName + " Email: " + user.userEmail + " Моб.: " + user.userPhone);
+            // если юзер пришел из нотификаций, пишем аналитику и отправляем сообщение в слак
+            if (getIntent().hasExtra("from notify")) {
+                sendGoogleAction("Notification", getIntent().getExtras().getString("from notify"));
+                SendSlackMessage slack = new SendSlackMessage("Событие: вход пользователя по пушу. Имя: " + user.userName + " Email: " + user.userEmail + " Моб.: " + user.userPhone);
+            }
+            else {
+                SendSlackMessage slack = new SendSlackMessage("Событие: вход пользователя. Имя: " + user.userName + " Email: " + user.userEmail + " Моб.: " + user.userPhone);
+            }
         }
 
-        // если юзер пришел из нотификаций, пишем аналитику (if releaseBuild)
-        if ((appConfig.releaseBuild)&&(getIntent().hasExtra("from notify"))) {
-            sendGoogleAction("Notification", getIntent().getExtras().getString("from notify"));
-        }
 
         // получаем первую порцию данных и заполняем адаптер
         bwRest = new UseRestClient(this);
