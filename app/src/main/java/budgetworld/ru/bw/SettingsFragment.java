@@ -15,17 +15,21 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
 
 public class SettingsFragment extends android.support.v4.app.Fragment {
 
     private Switch mSwitch;
+    private Tracker mTracker;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.settings_fragment,container,false);
+        sendScreenName();
         // Initializing switch1
         switch_push(v);
         return v;
@@ -42,10 +46,10 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // в зависимости от значения isChecked выводим нужное сообщение
                 if (isChecked) {
-
+                    sendGoogleAction("Action", "Push_on");
                     addPushSettings(getString(R.string.switch_setting), true);
                 } else {
-
+                    sendGoogleAction("Action", "Push_off");
                     addPushSettings(getString(R.string.switch_setting), false);
                 }
             }
@@ -68,5 +72,19 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         return sharedPref.getBoolean(setting, defaultValue);
     }
 
+    private void sendScreenName() {
+        String name = "Settings_BW";
+        // [START screen_view_hit]
+        mTracker.setScreenName(name);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        // [END screen_view_hit]
+    }
+
+    public void sendGoogleAction(String category, String description) {
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory(category)
+                .setAction(description)
+                .build());
+    }
 
 }

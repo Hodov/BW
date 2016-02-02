@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         // Initializing Navigation Drawer
         navigationMenu();
 
-
         //Initializing User info
         User user = new User(this);
         //Send message in Slack about user if releaseBuild
@@ -165,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
         mTracker = application.getDefaultTracker();
         mTracker.enableAdvertisingIdCollection(true);
-        sendScreenName();
+        sendScreenName("MainActivity_BW");
     }
 
     private void startToolbar() {
@@ -235,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (appConfig.releaseBuild) {
-            sendScreenName();
+            sendScreenName("MainActivity_BW");
         }
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
@@ -269,8 +268,8 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void sendScreenName() {
-        String name = "MainActivity_BW";
+    private void sendScreenName(String name) {
+        //String name = "MainActivity_BW";
         mTracker.setScreenName(name);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
