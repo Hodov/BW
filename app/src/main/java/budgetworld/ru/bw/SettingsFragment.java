@@ -11,8 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 
 public class SettingsFragment extends android.support.v4.app.Fragment {
@@ -51,7 +54,6 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     }
 
     private void addPushSettings(String setting, Boolean value) {
-        System.out.println("Записали");
         //SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = sharedPref.edit();
