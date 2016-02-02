@@ -24,12 +24,19 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
 
     private Switch mSwitch;
     private Tracker mTracker;
+    AppConfig appConfig;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.settings_fragment,container,false);
-        sendScreenName();
+        appConfig  = new AppConfig();
+        AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
+        mTracker = application.getDefaultTracker();
+        if (appConfig.releaseBuild) {
+            sendScreenName();
+        }
+
         // Initializing switch1
         switch_push(v);
         return v;
@@ -46,10 +53,15 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // в зависимости от значения isChecked выводим нужное сообщение
                 if (isChecked) {
-                    sendGoogleAction("Action", "Push_on");
+                    if (appConfig.releaseBuild) {
+                        sendGoogleAction("Action", "Push_on");
+                    }
+
                     addPushSettings(getString(R.string.switch_setting), true);
                 } else {
-                    sendGoogleAction("Action", "Push_off");
+                    if (appConfig.releaseBuild) {
+                        sendGoogleAction("Action", "Push_off");
+                    }
                     addPushSettings(getString(R.string.switch_setting), false);
                 }
             }
@@ -86,5 +98,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
                 .setAction(description)
                 .build());
     }
+
+
 
 }

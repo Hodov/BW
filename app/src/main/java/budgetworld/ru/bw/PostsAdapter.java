@@ -23,11 +23,13 @@ import java.util.List;
 public class PostsAdapter extends ArrayAdapter<Post> {
 
     private ArrayList<Post> posts;
+
     //Context context;
 
     public PostsAdapter(Context context, ArrayList<Post> posts) {
         super(context, 0, posts);
         this.posts = posts;
+
     }
 
     @Override

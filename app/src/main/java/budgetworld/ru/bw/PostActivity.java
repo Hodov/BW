@@ -24,17 +24,21 @@ public class PostActivity extends AppCompatActivity {
      */
     private Tracker mTracker;
     private String afterUrl = "?utm_source=app&utm_medium=android&utm_campaign=main";
+    AppConfig appConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
-
+        appConfig  = new AppConfig();
         // [START shared_tracker]
         // Obtain the shared Tracker instance.
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
         mTracker = application.getDefaultTracker();
-        sendScreenName();
+        if (appConfig.releaseBuild) {
+            sendScreenName();
+        }
+
         // [END shared_tracker]
 
         //TOOLBAR ==================================================================

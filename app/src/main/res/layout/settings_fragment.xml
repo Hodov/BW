@@ -21,7 +21,6 @@
         android:switchMinWidth="40dp"
         android:switchPadding="15dp"
         android:id="@+id/switch1"
-        android:layout_below="@+id/include"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="50dp"
