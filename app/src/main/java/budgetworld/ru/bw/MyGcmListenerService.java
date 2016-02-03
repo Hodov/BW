@@ -26,6 +26,7 @@ package budgetworld.ru.bw;
         import android.os.Bundle;
         import android.preference.PreferenceManager;
         import android.support.v4.app.NotificationCompat;
+        import android.text.Html;
         import android.util.Log;
 
         import com.google.android.gms.gcm.GcmListenerService;
@@ -44,7 +45,7 @@ public class MyGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        String message = data.getString("title");
+        String message = Html.fromHtml(data.getString("title")).toString();
         System.out.println(data.getString("title"));
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
